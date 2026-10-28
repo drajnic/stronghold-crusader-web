@@ -1,0 +1,493 @@
+.commandbar {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(#30362f, #252b27);
+  border-top: 2px solid #9b8355;
+  color: #dccba4;
+  z-index: 2;
+  box-shadow: 0 -3px 12px #46341a33;
+  gap: 15px;
+  padding: 12px 18px;
+}
+
+.realm-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 170px;
+}
+
+.health-track {
+  height: 3px;
+  background: #151d17;
+  margin-top: 9px;
+  width: 150px;
+}
+
+.population {
+  border-left: 1px solid #7d775344;
+  min-width: 120px;
+  padding-left: 14px;
+}
+
+.selection-info {
+  flex: 1;
+  min-width: 140px;
+  border-left: 1px solid #7d775344;
+  padding-left: 15px;
+}
+
+.time-controls {
+  margin-left: auto;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 108px;
+}
+
+.command-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.realm-mark > span {
+  font-size: 47px;
+  color: #bda266;
+  line-height: 1;
+}
+
+.realm-mark > div {
+  font:
+    10px Arial,
+    sans-serif;
+  letter-spacing: 1px;
+  font-size: 8px;
+}
+
+.realm-mark small {
+  font:
+    10px Arial,
+    sans-serif;
+  display: block;
+  color: #9d9e87;
+  margin-top: 9px;
+  letter-spacing: 0.1px;
+}
+
+.health-track i {
+  height: 100%;
+  background: #8aab83;
+  display: block;
+  width: 100%;
+  transition: width 0.2s;
+}
+
+.population > span {
+  color: #e4d3aa;
+  letter-spacing: 0.4px;
+  font-size: 20px;
+}
+
+.population small {
+  display: block;
+  font:
+    7px Arial,
+    sans-serif;
+  letter-spacing: 2px;
+  color: #b3a481;
+  margin-top: 4px;
+}
+
+.population p {
+  font:
+    9px Arial,
+    sans-serif;
+  color: #8d9b86;
+  margin: 10px 0 0;
+}
+
+.selection-info b {
+  font-weight: normal;
+  display: block;
+  margin-top: 7px;
+  color: #ddcba4;
+  font-size: 15px;
+}
+
+.selection-info p {
+  font:
+    10px Arial,
+    sans-serif;
+  line-height: 1.6;
+  color: #989d87;
+  margin: 6px 0 0;
+  font-size: 9px;
+}
+
+.time-controls > div {
+  display: flex;
+  border: 1px solid #85734f;
+}
+
+.time-controls small {
+  display: block;
+  font:
+    8px Arial,
+    sans-serif;
+  letter-spacing: 1.5px;
+  color: #9b9479;
+  margin: 10px 0;
+}
+
+.command-actions button {
+  background: #ffffff09;
+  border: 1px solid #a18b5b66;
+  color: #d8c69e;
+  padding: 4px 6px;
+  font:
+    9px Arial,
+    sans-serif;
+}
+
+.time-controls > small {
+  font-size: 7px;
+  letter-spacing: 0.6px;
+  margin: 8px 0 0;
+}
+
+.selection-info .eyebrow {
+  color: #9b8b64;
+  font-size: 7px;
+}
+
+.time-controls .text-button {
+  font-size: 8px;
+  color: #998e70;
+}
+
+.time-controls button:not(.text-button) {
+  background: #1f2923;
+  color: #a99e7d;
+  border: 0;
+  border-right: 1px solid #74644666;
+  width: 31px;
+  height: 29px;
+  font:
+    11px Arial,
+    sans-serif;
+}
+
+.time-controls button.active {
+  background: #b49961;
+  color: #232e27;
+}
+
+.command-actions button:hover {
+  background: #a18b5b33;
+}
+
+.time-controls button:disabled {
+  opacity: 0.3;
+}
+
+#connection-state {
+  display: block;
+  font:
+    8px Arial,
+    sans-serif;
+  color: #9fc3a5;
+  margin-top: 6px;
+}
+
+.time-controls #pause {
+  font-size: 16px;
+  color: #e1d3ad;
+}
+
+@media (width <= 1150px) {
+  .commandbar {
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .realm-mark {
+    min-width: 165px;
+    gap: 8px;
+  }
+
+  .health-track {
+    width: 130px;
+  }
+
+  .population {
+    min-width: 125px;
+    padding-left: 15px;
+  }
+
+  .selection-info {
+    padding-left: 15px;
+  }
+
+  .realm-mark > div {
+    font-size: 8px;
+  }
+
+  .realm-mark > span {
+    font-size: 37px;
+  }
+
+  .selection-info b {
+    font-size: 15px;
+  }
+}
+
+@media (width <= 900px) {
+  .selection-info {
+    display: none;
+  }
+
+  .commandbar {
+    gap: 10px;
+  }
+
+  .population {
+    flex: 1;
+    min-width: 90px;
+  }
+
+  .realm-mark {
+    min-width: 160px;
+  }
+}
+
+@media (width <= 1100px) {
+  .realm-mark {
+    min-width: 145px;
+  }
+
+  .health-track {
+    width: 112px;
+  }
+
+  .commandbar {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .population {
+    min-width: 100px;
+  }
+
+  .selection-info {
+    display: block;
+    min-width: 110px;
+    padding-left: 10px;
+  }
+
+  .realm-mark > span {
+    font-size: 34px;
+  }
+
+  .selection-info b {
+    font-size: 13px;
+  }
+
+  .selection-info p {
+    font-size: 8px;
+  }
+
+  .command-actions button {
+    font-size: 8px;
+    padding: 4px;
+  }
+}
+
+@media (width <= 800px) {
+  .realm-mark {
+    display: none;
+  }
+
+  .population {
+    min-width: 88px;
+  }
+
+  .selection-info {
+    display: block;
+  }
+
+  .time-controls {
+    min-width: 96px;
+  }
+
+  .population > span {
+    font-size: 17px;
+  }
+
+  .time-controls button:not(.text-button) {
+    width: 26px;
+  }
+}
+
+@media (width <= 580px) {
+  .population {
+    display: none;
+  }
+
+  .selection-info {
+    border-left: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .command-actions {
+    gap: 3px;
+    margin-top: 6px;
+  }
+
+  .commandbar {
+    gap: 7px;
+    align-items: center;
+    padding: 9px;
+  }
+
+  .time-controls {
+    min-width: 92px;
+  }
+
+  .selection-info p {
+    font-size: 8px;
+  }
+
+  .selection-info b {
+    font-size: 12px;
+  }
+
+  .command-actions button {
+    font-size: 7px;
+    padding: 4px;
+  }
+
+  .time-controls small {
+    font-size: 6px;
+  }
+
+  .selection-info .eyebrow {
+    font-size: 6px;
+  }
+
+  .time-controls button:not(.text-button) {
+    width: 23px;
+    font-size: 9px;
+  }
+}
+
+@media (width <= 900px) {
+  .commandbar {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr) 108px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .realm-mark {
+    display: none;
+  }
+
+  .population {
+    min-width: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .selection-info {
+    display: block;
+    min-width: 0;
+    padding-left: 12px;
+  }
+
+  .command-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 7px;
+  }
+
+  .time-controls {
+    min-width: 0;
+    width: 108px;
+  }
+
+  .selection-info b {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.25;
+    margin-top: 5px;
+  }
+
+  .selection-info p {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+
+  .command-actions button {
+    min-width: 0;
+    min-height: 25px;
+    padding: 4px;
+    font-size: 8px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .selection-info .eyebrow {
+    display: block;
+    line-height: 1.4;
+  }
+}
+
+@media (width <= 580px) {
+  .commandbar {
+    grid-template-columns: minmax(0, 1fr) 92px;
+    gap: 8px;
+    padding: 9px;
+  }
+
+  .population {
+    display: none;
+  }
+
+  .selection-info {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .time-controls {
+    width: 92px;
+  }
+
+  .selection-info b {
+    font-size: 12px;
+  }
+
+  .command-actions button {
+    font-size: 7px;
+    min-height: 27px;
+    padding: 3px;
+  }
+}
+
+@media (width >= 581px) and (width <= 900px) {
+  .time-controls button:not(.text-button) {
+    width: 26px;
+  }
+}

@@ -1,0 +1,71 @@
+.stock-row {
+  display: grid;
+  grid-template-columns: 1fr 55px 68px 68px;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid #baa17166;
+  padding: 8px 0;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.trade-note {
+  font-size: 11px !important;
+  color: #9f563c !important;
+}
+
+.stock-row > b {
+  text-align: right;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+.stock-row button {
+  font:
+    11px Arial,
+    sans-serif;
+  background: #e6d2a6;
+  border: 1px solid #bba16e;
+  color: #526049;
+  padding: 6px;
+}
+
+.stock-row > small {
+  font:
+    7px Arial,
+    sans-serif;
+  color: #9b8762;
+  letter-spacing: 1px;
+}
+
+.stock-row > span small {
+  display: block;
+  font:
+    8px Arial,
+    sans-serif;
+  color: #92815f;
+  margin-top: 3px;
+}
+
+.stock-row button small {
+  font-size: 8px;
+  color: #8c7146;
+  margin-left: 3px;
+}
+
+@media (width <= 580px) {
+  .stock-row {
+    grid-template-columns: 1fr 38px 58px 58px;
+    gap: 5px;
+    font-size: 11px;
+  }
+
+  .stock-row button {
+    font-size: 9px;
+    padding: 5px;
+  }
+
+  .stock-row button small {
+    font-size: 7px;
+  }
+}

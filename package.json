@@ -1,0 +1,55 @@
+{
+  "name": "stronghold-crusader-web",
+  "version": "3.0.0",
+  "author": {
+    "name": "David Rajnic",
+    "email": "rajnic.david@live.com"
+  },
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently --kill-others --names host,client \"pnpm dev:server\" \"pnpm dev:client\"",
+    "dev:server": "tsx watch src/server/entry.ts --dev",
+    "dev:client": "vite --host 127.0.0.1 --port 4173 --strictPort",
+    "build": "tsc --noEmit && vite build && esbuild src/server/entry.ts --bundle --platform=node --format=esm --packages=external --target=node22 --sourcemap --outfile=dist/server/entry.js",
+    "start": "node dist/server/entry.js",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "pnpm lint:ts && pnpm lint:css",
+    "lint:checkstyle": "mkdir -p work/reports && eslint . --format checkstyle --output-file work/reports/checkstyle.xml",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "unused": "knip",
+    "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm unused && pnpm test && pnpm lint:checkstyle && pnpm build",
+    "lint:ts": "eslint .",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "hooks:install": "node scripts/install-git-hooks.mjs",
+    "prepare": "pnpm hooks:install"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.19.0",
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.25.12",
+    "eslint": "^10.13.0",
+    "eslint-formatter-checkstyle": "^9.0.1",
+    "globals": "^16.5.0",
+    "jiti": "^2.6.1",
+    "knip": "^5.66.1",
+    "prettier": "^3.6.2",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3",
+    "vite": "^7.1.12"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.4.0"
+  }
+}

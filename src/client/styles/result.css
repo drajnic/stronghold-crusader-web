@@ -1,0 +1,47 @@
+.result-stats {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  border-top: 1px solid #c0aa79;
+  border-bottom: 1px solid #c0aa79;
+  margin: 25px 0;
+  padding: 20px 0;
+}
+
+.result h1 {
+  font-size: 44px;
+  margin: 14px 0;
+}
+
+.result > p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #7b6a4b;
+}
+
+.result-stats b {
+  font-size: 25px;
+  display: block;
+  font-weight: normal;
+  color: #466350;
+}
+
+.result-stats small {
+  font:
+    8px Arial,
+    sans-serif;
+  letter-spacing: 1px;
+  color: #8a7650;
+  display: block;
+  margin-top: 7px;
+}
+
+@media (width <= 580px) {
+  .result-stats {
+    gap: 18px;
+  }
+
+  .result-stats small {
+    font-size: 7px;
+  }
+}

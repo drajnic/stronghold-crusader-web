@@ -1,0 +1,190 @@
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.menu-grid .menu-wide,
+.menu-secondary {
+  grid-column: 1/-1;
+}
+
+.menu-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: inherit;
+  border-top: 1px solid #b69c6d66;
+  padding-top: 8px;
+}
+
+.mission {
+  width: 100%;
+  display: block;
+  text-align: left;
+  margin: 9px 0;
+  padding: 15px;
+  border: 1px solid #b9a06d;
+  background: #efe1bc66;
+  color: #4f624c;
+}
+
+.menu h1 {
+  font-size: 47px;
+  line-height: 0.98;
+  letter-spacing: -1.5px;
+  margin: 8px 0 18px;
+}
+
+.menu-grid button {
+  border: 1px solid #b69c6d;
+  background: linear-gradient(120deg, #f5e9c9aa, #ccb48433);
+  text-align: left;
+  padding: 13px 14px;
+  color: #435747;
+  font-size: 17px;
+  min-height: 67px;
+}
+
+.mission b,
+.mission small,
+.mission span {
+  display: block;
+}
+
+.mission b {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.mission small {
+  font:
+    11px/1.5 Arial,
+    sans-serif;
+  color: #8a7450;
+  margin: 7px 0;
+}
+
+.mission span {
+  font:
+    9px Arial,
+    sans-serif;
+  letter-spacing: 0.5px;
+  color: #437264;
+}
+
+.menu h1 span {
+  display: block;
+  font-size: 27px;
+  letter-spacing: 9px;
+  text-transform: uppercase;
+  margin: 12px 0 0 9px;
+  color: #366663;
+}
+
+.menu-grid button small {
+  display: block;
+  font:
+    9px/1.5 Arial,
+    sans-serif;
+  color: #8b7651;
+  margin-top: 5px;
+}
+
+.menu .intro-emblem {
+  font-size: 48px;
+  margin: 8px 0 2px;
+}
+
+.menu .subtitle {
+  font-size: 8px;
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+.menu .intro-copy {
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 20px 0;
+}
+
+.menu-grid button:hover {
+  background: #f8ebca;
+  border-color: #486f63;
+}
+
+.menu-grid #resume {
+  grid-column: 1/-1;
+  background: linear-gradient(#3e7a76, #2d605f);
+  color: #f0e1b8;
+  min-height: 48px;
+}
+
+.menu-grid #resume span {
+  float: right;
+}
+
+@media (width <= 580px) {
+  .menu-grid {
+    gap: 6px;
+  }
+
+  .menu h1 {
+    font-size: 38px;
+  }
+
+  .menu-grid button {
+    font-size: 15px;
+    padding: 11px;
+    min-height: 65px;
+  }
+
+  .menu h1 span {
+    font-size: 22px;
+    letter-spacing: 6px;
+  }
+
+  .menu-grid button small {
+    font-size: 8px;
+  }
+
+  .menu .intro-emblem {
+    font-size: 40px;
+  }
+
+  .menu .intro-copy {
+    font-size: 12px;
+    margin: 16px 0;
+  }
+}
+
+@media (height <= 740px) {
+  .menu h1 {
+    font-size: 40px;
+  }
+
+  .menu-grid button {
+    padding: 11px;
+    min-height: 60px;
+  }
+
+  .menu h1 span {
+    font-size: 23px;
+    margin-top: 8px;
+  }
+
+  .menu .intro-emblem {
+    display: none;
+  }
+
+  .menu .intro-copy {
+    margin: 15px 0;
+  }
+
+  .menu .intro-foot {
+    margin-top: 14px;
+  }
+
+  .menu .subtitle {
+    font-size: 7px;
+  }
+}

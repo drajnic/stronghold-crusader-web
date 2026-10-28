@@ -1,0 +1,1280 @@
+[
+  {
+    "options": {
+      "mode": "skirmish",
+      "scenario": 0
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "5b707ad89a5abe193d35f5428d4c8bf53869f709a4813299f7e2a3c4ec806ec9"
+      },
+      {
+        "tick": 20,
+        "hash": "e2437c757df88e561046b09ae2a5c8ddf82bcfe5c3dcd5d64abc6aab9c5cfb37"
+      },
+      {
+        "tick": 100,
+        "hash": "c8592a33f43313bd352fc60ef3e9ecfbe41b240b02c07294b98a0e9d1a32a7c1"
+      },
+      {
+        "tick": 400,
+        "hash": "fa6e32bad3c29cc4df15e0522f110b4800d57ab6ebea68bed2ce3c859b1f0bb0"
+      },
+      {
+        "tick": 1200,
+        "hash": "0d2fb33dc2b73519a3c3a279a2c95b4406dd3f85f978b336bd9807d0efc856f6"
+      },
+      {
+        "tick": 2400,
+        "hash": "9e2dff6719a724b59956d9bc44725bd046bd923c21f5976f25903b3b9c0da6aa"
+      },
+      {
+        "tick": 4200,
+        "hash": "ee6a971890f2917b297946378bcd35d2b85334569903c59028895573d7f1c6b4"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "skirmish",
+      "scenario": 1
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "8e40fd650258b45996f29f23fcd9fc14c5e6b71eab619d77239f42e799e5f061"
+      },
+      {
+        "tick": 20,
+        "hash": "2c9760d6ad8de100e127c9060ef8099a395c531ea43a94ce7977a8a3b5a2a3ae"
+      },
+      {
+        "tick": 100,
+        "hash": "8834955d548abeb6c913a33473c599facdba2a9d8e99213923b7409c786a49d7"
+      },
+      {
+        "tick": 400,
+        "hash": "b196501cc4ecb03b1ddbf7e259da7ed3dcb2973013ec28988abe5ac3f5133e92"
+      },
+      {
+        "tick": 1200,
+        "hash": "d986ecb7083c7530a9640565ab0544f08fd3fdafbe31d46dcbd6c586c93fdd75"
+      },
+      {
+        "tick": 2400,
+        "hash": "a8546c5375125376f7412a9be6c8ee9fa03bfd606a3947bab597f43720fb5ee8"
+      },
+      {
+        "tick": 4200,
+        "hash": "cd2109dc9cad4b4b5655808d365e1696b8432543490301e9e5ba59e90f25b8a0"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "skirmish",
+      "scenario": 2
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "eafb1637a3be86cdc66577576e842f046de1d3fffb508c1d907e81e5dd191b45"
+      },
+      {
+        "tick": 20,
+        "hash": "a304725ea8d4f2172390380553a8f1c3a16afb0d1b0406ad2b7146d99a377614"
+      },
+      {
+        "tick": 100,
+        "hash": "66b79f9778f987865dbfed9e25f117549b1f69e73e25a871463f3421d292ca1a"
+      },
+      {
+        "tick": 400,
+        "hash": "618219f895409f5f779556a24422ad0d9f5a38f0f6adaf04d476505a077445a6"
+      },
+      {
+        "tick": 1200,
+        "hash": "903b3df8a6bce384afb59e8b8ee3e08c5abb63f9a5f1e11bfdc751c8330d9109"
+      },
+      {
+        "tick": 2400,
+        "hash": "c3b3b333c039d9a1be6fc2129902ba9f5242025675c56d645719582453462504"
+      },
+      {
+        "tick": 4200,
+        "hash": "09392d5c222bf5a369cea0e35bd84e6f762585e97df61ea6e06c34754ac9b0be"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "sandbox"
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "9e872f9d43edd4fd7e202ac3cf9f8103a15ed31b5997239c3b73b085aebdb325"
+      },
+      {
+        "tick": 20,
+        "hash": "ad5bacda0d0bdab4f2a040e5cb6e442299659007ee9fee14f1ef602761de5744"
+      },
+      {
+        "tick": 100,
+        "hash": "a6dc7774a1b9d5923366169c14dd197af580d3eafd5cf2bf4f90ea4aaf227e9f"
+      },
+      {
+        "tick": 400,
+        "hash": "4cd2899bbc16f69110a6846edce717e0463a0d280cf200e6df8b020f189813ff"
+      },
+      {
+        "tick": 1200,
+        "hash": "921883894c4842345463685e7cd3fabfb6f2c06ad2f79096c3529869f4889ec1"
+      },
+      {
+        "tick": 2400,
+        "hash": "498ffee8783c0422ac89ab63040d1a0c827afc5dd84dd444d73d0538b8d0363c"
+      },
+      {
+        "tick": 4200,
+        "hash": "ebef5488b6e552e95c46b6337eb51bd634c2e4c851d8e829ad25cc9732197cd8"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "survival"
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "86322c975e6216352d3bc1df01f17df08285f9212200c4a97b6a09e0abe67e97"
+      },
+      {
+        "tick": 20,
+        "hash": "b74809c3a3c3cd07c4426cf28b7faa6e0968388af23f874a6c5e28433dfc9686"
+      },
+      {
+        "tick": 100,
+        "hash": "a9914f045a89dbb3f15683c2369a500713c562d8fd17ba09dcb15dd08021a9e2"
+      },
+      {
+        "tick": 400,
+        "hash": "b1163c683b2463bcc09cb9da4f0db079b0a7dd5cba08cd978e86f775a3e4d2e9"
+      },
+      {
+        "tick": 1200,
+        "hash": "1bc979f584c78ed585318576499bd61423a11d9087e5425ebe4d8625a899e993"
+      },
+      {
+        "tick": 2400,
+        "hash": "491611a3ff7f6c5521478ec744866bf42c8159932bfa0ae5ca48308b739c659d"
+      },
+      {
+        "tick": 4200,
+        "hash": "e8630553ee564c2db202b4caafa7ea5ae98b3016ad3aca3006093e061c6ee00b"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "campaign",
+      "scenario": 0
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "61e8cc36a8551aa5abe5e5f782519a1bfcfc60ceaa2d537662f76e05c3bd46a2"
+      },
+      {
+        "tick": 20,
+        "hash": "a6f8ced4c94dccca1d92e1305cf3b5dac1aa7305a1f5125bc6458eea8d50ddb8"
+      },
+      {
+        "tick": 100,
+        "hash": "b7f1841f7ba5555ec766e2b80fda22dc3004ef8f69d1f33d9d433a00d9e0c1f2"
+      },
+      {
+        "tick": 400,
+        "hash": "22d1b08c3065eb7db55ecddcd556f174b7868c75b7dabe7470e42be0d3b00d45"
+      },
+      {
+        "tick": 1200,
+        "hash": "e087f77ef6f7023a9e4ef654e66cfc700db15e62286cb07f53f0ede05f3fe50f"
+      },
+      {
+        "tick": 2400,
+        "hash": "ee6cd59f10b13ec40f9dfd415a9fe3a81e011fa5f6c9556eda83d6bab52f499a"
+      },
+      {
+        "tick": 4200,
+        "hash": "57d86ae41ee105cb944852c468edb5f101f9ba4e2dda7da03120fbc1198c71cd"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "campaign",
+      "scenario": 1
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "ac84ad29118dc85cfd68fd70225ce9e42c4d1d3781af54ccc20b84c8416fd3ca"
+      },
+      {
+        "tick": 20,
+        "hash": "3aad4df30581794f5ee0e13ae6cfa33a94c89f07636f9d2590d7d608d3de5e1b"
+      },
+      {
+        "tick": 100,
+        "hash": "a20c8da80b50050da9702b578693c6f5a83194d72d13673959b703c57995bc6d"
+      },
+      {
+        "tick": 400,
+        "hash": "8f5f6eca43593eb4493b127d5455af8732daf84b058053fdfa38cfaa5d009b4f"
+      },
+      {
+        "tick": 1200,
+        "hash": "876fa6b3b19ced5289f08c6c7e1dcc247439b1bd2f45dbaa8ee23227a5b66969"
+      },
+      {
+        "tick": 2400,
+        "hash": "4664785c823fcf0b75783b82345fdfa57f19cf251d33ce0fbcbe34d48ce8ebcc"
+      },
+      {
+        "tick": 4200,
+        "hash": "44a406ad116f5b2f7140771521f751d7659d32e1b4f99005ae292fc63c0bec07"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "campaign",
+      "scenario": 2
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "e99ea82ce7541501a3c6717c081b00d66a2136c68bfc3ab46ad606e58f7b5224"
+      },
+      {
+        "tick": 20,
+        "hash": "12e12ed32fc5603a23204683ac6faa11963c63000732213182751a5e2b33405c"
+      },
+      {
+        "tick": 100,
+        "hash": "129ea457c9476fadbb7c971a4ccc4bc63348ae29f5f2823cfef9983954f1f857"
+      },
+      {
+        "tick": 400,
+        "hash": "d333e9867da1994eb0c412eb32b513bb6c062060247c7feab1a576cc37a25beb"
+      },
+      {
+        "tick": 1200,
+        "hash": "1ea101fc7efd07c9eae6689994b27526ff069e3d57ef3091f94a37510ad6aac0"
+      },
+      {
+        "tick": 2400,
+        "hash": "17087f3c61594c5d9b67ebe0c682174b07cc5de943227f43b9eb8cc51ebeb205"
+      },
+      {
+        "tick": 4200,
+        "hash": "6f2da47fca80fda6e8fa7e3692949dd13cfc12dffe12f22dc9d0c38238dfe732"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "multiplayer",
+      "multiplayerMode": "coop"
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "5143e36462b77021e6d35094699289834c35cc24ca5d838d6d24f358a3aa7355"
+      },
+      {
+        "tick": 20,
+        "hash": "449dea77386d32b0f1232d028cf2e55f3fb82aa05e6228863148cc4ce5506b9c"
+      },
+      {
+        "tick": 100,
+        "hash": "c71ab5fe567fe25dfe0838d43403430f2d8602b5c1c3fc6f6a7b39f7ef09b565"
+      },
+      {
+        "tick": 400,
+        "hash": "2c3c0398e8879adccb4b4ca1ad7677ca098fbb5c569a911021fbffc726458fe1"
+      },
+      {
+        "tick": 1200,
+        "hash": "47188df5b3bda096ff9be3de52aa3f461d8308825416c847d4ebd4bd66b95aa7"
+      },
+      {
+        "tick": 2400,
+        "hash": "1e9bbc343c170652612ecce3f43671a9818937d199e6614f3a36086370126812"
+      },
+      {
+        "tick": 4200,
+        "hash": "2aba67e44b893b093566fe95a5be3b6298175a5a16d53e5bb98041cd894b527f"
+      }
+    ]
+  },
+  {
+    "options": {
+      "mode": "multiplayer",
+      "multiplayerMode": "versus"
+    },
+    "commands": [
+      {
+        "tick": 1,
+        "action": {
+          "type": "place",
+          "building": "house",
+          "x": 18,
+          "y": 49
+        }
+      },
+      {
+        "tick": 2,
+        "action": {
+          "type": "trade",
+          "resource": "iron",
+          "amount": 2,
+          "buy": true
+        }
+      },
+      {
+        "tick": 3,
+        "action": {
+          "type": "policy",
+          "tax": 2,
+          "rations": 1
+        }
+      },
+      {
+        "tick": 4,
+        "action": {
+          "type": "recruit",
+          "unit": "archer"
+        }
+      },
+      {
+        "tick": 5,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 23,
+          "y": 46
+        }
+      },
+      {
+        "tick": 6,
+        "action": {
+          "type": "place",
+          "building": "wall",
+          "x": 20,
+          "y": 48
+        }
+      },
+      {
+        "tick": 40,
+        "action": {
+          "type": "stance",
+          "ids": [11],
+          "stance": "hold"
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "type": "command",
+          "ids": [11, 12],
+          "x": 25,
+          "y": 45
+        }
+      },
+      {
+        "tick": 100,
+        "action": {
+          "type": "repair",
+          "id": 1
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "type": "invade"
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "type": "trade",
+          "resource": "wood",
+          "amount": null,
+          "buy": true
+        }
+      }
+    ],
+    "expected": [
+      {
+        "tick": 0,
+        "hash": "b65dbebe6761433367d6bfe1b1a99cae14a3e4278963c5c21a459558abbc9e74"
+      },
+      {
+        "tick": 20,
+        "hash": "241abca0d1325c9c702ff92d168545fc7caadf7d1a04815100691ec469d9822a"
+      },
+      {
+        "tick": 100,
+        "hash": "2ba2d00ea1c38a4c4dd592f1fd65877d8b7e1f58ab6fed0b98ffcfb65b99d305"
+      },
+      {
+        "tick": 400,
+        "hash": "74a5b43b15ad8f83c7f4817def788d4ee5bc3d057672b1cb0d96d70dd4d5d16b"
+      },
+      {
+        "tick": 1200,
+        "hash": "9be13cf487020838010babbf9b20c3f83c4e1227cdc0e226064fa1622288ffd9"
+      },
+      {
+        "tick": 2400,
+        "hash": "9cb33cffb31abf2dd5593e313c9baf5c72fefea44c3c1cd2542e9d5246920f0e"
+      },
+      {
+        "tick": 4200,
+        "hash": "18c57eddf8ec77ba481f74ebae5aad2df6e83093d9f35c719aef80ac5808e7f7"
+      }
+    ]
+  }
+]

@@ -1,0 +1,118 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #242923;
+  color: var(--ink);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background 0.16s,
+    color 0.16s,
+    transform 0.16s;
+}
+
+input,
+select {
+  background: #eddfbc;
+  border: 1px solid #bca372;
+  color: #4b573e;
+  font-family: Arial, sans-serif;
+}
+
+:root {
+  --ink: #352f24;
+  --muted: #81745a;
+  --gold: #c5a66b;
+  --teal: #326d70;
+  --paper: #e6d9b8;
+  --dark: #252b27;
+  --border: #bba77a;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button:focus-visible,
+canvas:focus-visible,
+a:focus-visible {
+  outline: 2px solid #e5bf71;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+#app {
+  height: 100dvh;
+  display: grid;
+  grid-template: 74px minmax(0, 1fr) 133px / minmax(0, 1fr) 258px;
+}
+
+@media (width >= 1500px) {
+  #app {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+}
+
+@media (width <= 900px) {
+  #app {
+    grid-template: 64px minmax(0, 1fr) 112px / minmax(0, 1fr) 222px;
+  }
+}
+
+@media (height <= 760px) {
+  #app {
+    grid-template-rows: 64px minmax(0, 1fr) 112px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+@media (width >= 1500px) {
+  #app {
+    grid-template-columns: minmax(0, 1fr) 284px;
+  }
+}
+
+@media (width <= 800px) {
+  #app {
+    grid-template: 60px minmax(0, 1fr) 146px / minmax(0, 1fr) 205px;
+  }
+}
+
+@media (width <= 580px) {
+  #app {
+    grid-template: 58px minmax(0, 1fr) 140px / minmax(0, 1fr) 153px;
+  }
+}
+
+@media (width <= 900px) {
+  #app {
+    grid-template-rows: 64px minmax(0, 1fr) 158px;
+  }
+}
+
+@media (width <= 580px) {
+  #app {
+    grid-template-rows: 58px minmax(0, 1fr) 158px;
+  }
+}

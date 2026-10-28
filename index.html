@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#202b28" />
+    <title>Stronghold Crusader · The Amber Valley</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23256b70' d='M3 3h34v34H3z'/%3E%3Cpath fill='%23e8cd8c' d='M9 32V10h5v5h4V7h5v8h4v-5h5v22H9z'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <button class="brand" id="menu-button" title="Main menu">
+          <span class="brand-seal">♜</span><span>STRONGHOLD<small>CRUSADER</small></span>
+        </button>
+        <div id="resources" class="resources" aria-label="Resources"></div>
+        <div class="top-actions">
+          <button id="stockpile-button">Stockpile</button><button id="save">Save</button
+          ><button id="load">Load</button><button id="help" aria-label="Field guide">?</button>
+        </div>
+      </header>
+      <main id="battlefield">
+        <canvas
+          id="world"
+          tabindex="0"
+          aria-label="Isometric battlefield. Drag select soldiers, right click to command, WASD to pan."
+        ></canvas>
+        <div class="world-label">
+          ◇ <span id="map-title">THE AMBER VALLEY</span>
+          <small id="mode-label">A REALM IN THE MAKING</small>
+        </div>
+        <div class="wave-banner">
+          <span id="wave-label">THE CROSSROADS</span><b id="wave-countdown">Your kingdom awaits</b>
+        </div>
+        <section class="objectives parchment" id="objectives">
+          <div class="eyebrow">YOUR CAMPAIGN</div>
+          <h2 id="objective-title">A foothold in the desert.</h2>
+          <p id="objective-copy"></p>
+          <button id="dismiss-objectives" class="text-button">Hide objectives ▴</button>
+        </section>
+        <button id="show-objectives" hidden>◇ Objectives</button>
+        <div id="toast" role="status" aria-live="polite"></div>
+        <div id="placement-hint" hidden></div>
+        <div class="camera-tools">
+          <button id="zoom-out" aria-label="Zoom out">−</button><span id="zoom-label">83%</span
+          ><button id="zoom-in" aria-label="Zoom in">+</button
+          ><button id="home" title="Center on your keep (H)">⌂</button>
+        </div>
+        <div class="world-controls">WASD pan · Scroll zoom · Drag select · Right-click command</div>
+      </main>
+      <aside class="ledger">
+        <div class="ledger-heading"><span>BUILD YOUR KINGDOM</span><b>Construction ledger</b></div>
+        <div id="tabs" class="tabs" role="tablist" aria-label="Construction categories"></div>
+        <div id="build-list"></div>
+        <p id="ledger-note" class="ledger-note"></p>
+        <details class="policy">
+          <summary class="eyebrow"><span>THE PEOPLE'S VOICE</span><b id="popularity"></b></summary>
+          <label
+            >Tax
+            <select id="tax">
+              <option value="-3">Lavish gift</option>
+              <option value="-2">Generous gift</option>
+              <option value="-1">Small gift</option>
+              <option value="0">No tax</option>
+              <option value="1">Low tax</option>
+              <option value="2">Fair tax</option>
+              <option value="3">High tax</option>
+            </select></label
+          ><label
+            >Rations
+            <select id="rations">
+              <option value="0">No rations</option>
+              <option value="1">Half rations</option>
+              <option value="2">Normal rations</option>
+              <option value="3">Extra rations</option>
+            </select></label
+          ><small id="popularity-detail"></small>
+          <div
+            class="ruler-summary"
+            title="Gardens raise popularity and troop morale but lower productivity. Gallows reverse this tradeoff; rule is capped at five levels either way."
+          >
+            <span id="ruler-status">Balanced rule</span
+            ><meter
+              id="ruler-meter"
+              min="-5"
+              max="5"
+              value="0"
+              aria-label="Kindness and fear balance"
+            ></meter
+            ><small id="ruler-effects"></small>
+          </div>
+          <button id="invasion" hidden>Call a practice invasion</button>
+        </details>
+        <div class="minimap-wrap">
+          <div class="eyebrow">VALLEY MAP <span>CLICK TO TRAVEL</span></div>
+          <canvas
+            id="minimap"
+            width="190"
+            height="190"
+            aria-label="Minimap. Click to move camera."
+          ></canvas>
+          <div class="map-key"><span>◆ Your realm</span><span>◆ Rival realm</span></div>
+        </div>
+      </aside>
+      <footer class="commandbar">
+        <div class="realm-mark">
+          <span>♜</span>
+          <div>
+            YOUR STRONGHOLD<small id="keep-status">Keep integrity · 100%</small>
+            <div class="health-track"><i id="keep-health"></i></div>
+          </div>
+        </div>
+        <div class="population">
+          <span id="population"></span><small>POPULATION</small>
+          <p id="workers"></p>
+        </div>
+        <section id="selection-info" class="selection-info"></section>
+        <div class="time-controls">
+          <div>
+            <button id="pause" aria-label="Pause game">Ⅱ</button
+            ><button data-speed="1" class="active">1×</button><button data-speed="2">2×</button
+            ><button data-speed="3">3×</button>
+          </div>
+          <small id="clock">00:00</small><span id="connection-state"></span>
+        </div>
+      </footer>
+    </div>
+    <div id="modal-backdrop" class="modal-backdrop">
+      <section
+        id="menu"
+        class="modal menu"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="intro-title"
+      >
+        <div class="ornament">✦ <span>THE AMBER CHRONICLES</span> ✦</div>
+        <div class="intro-emblem">♜</div>
+        <h1 id="intro-title">Stronghold<span>Crusader</span></h1>
+        <p class="subtitle">A KINGDOM BUILT FROM SAND</p>
+        <p class="intro-copy">
+          Raise a living castle at the desert crossroads.<br />Feed your people. Forge your army.
+          Command the siege.
+        </p>
+        <div class="menu-grid">
+          <button id="resume" hidden>Resume kingdom <span>→</span></button>
+          <button id="load-saved" class="menu-wide">
+            Load saved kingdom <small>Restore your local browser save.</small>
+          </button>
+          <button data-open="campaign">Campaign <small>Three chapters in the sands.</small></button>
+          <button data-open="skirmish">Skirmish <small>A rival lord. One valley.</small></button>
+          <button data-open="multiplayer">
+            Multiplayer <small>Two players · Co-op or versus</small>
+          </button>
+          <button data-mode="survival">
+            Survival <small>Withstand the raiding armies.</small>
+          </button>
+          <button data-mode="sandbox" class="menu-wide">
+            Castle Builder <small>Build freely. Call invasions.</small>
+          </button>
+          <div class="menu-secondary">
+            <button id="open-maps">
+              Maps & editor <small>Create and manage your maps.</small>
+            </button>
+            <button data-open="settings">
+              Settings & controls <small>Sound, camera and keybindings.</small>
+            </button>
+          </div>
+        </div>
+        <small class="intro-foot"
+          >Created by David Rajnic · MIT licensed<br />Private browser demo · Original procedural
+          artwork · Inspired by classic castle strategy · No external game assets</small
+        >
+      </section>
+      <section id="skirmish" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">THE CROSSROADS</div>
+        <h1>Choose your rival.</h1>
+        <p>
+          Build an economy, arm your soldiers and destroy the rival keep while protecting your own.
+        </p>
+        <label class="form-label"
+          >Difficulty<select id="difficulty">
+            <option value="easy">Easy · a patient rival</option>
+            <option value="normal" selected>Normal · a determined rival</option>
+            <option value="hard">Hard · a relentless rival</option>
+          </select></label
+        ><label class="form-label"
+          >Opponent<select id="opponent">
+            <option value="0">The Emir · balanced forces</option>
+            <option value="1">The Wolf · relentless assaults</option>
+            <option value="2">The Warden · fortified stronghold</option>
+          </select></label
+        ><button id="start-skirmish" class="primary">Establish your kingdom →</button
+        ><button data-back class="secondary">Back to main menu</button>
+      </section>
+      <section id="campaign" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">THE AMBER CHRONICLES</div>
+        <h1>Three roads to glory.</h1>
+        <p>Win each chapter to unlock the next. Progress is remembered in this browser.</p>
+        <div id="missions"></div>
+        <button data-back class="secondary">Back to main menu</button>
+      </section>
+      <section id="multiplayer" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">REALMS UNITED · REALMS DIVIDED</div>
+        <h1>Gather your ally.</h1>
+        <p>
+          Open a second browser tab or another computer on the same LAN and join with the room code.
+          The host starts once both players arrive. Both players use the host’s live simulation.
+        </p>
+        <label class="form-label"
+          >Your name<input
+            id="player-name"
+            maxlength="24"
+            value="Desert lord"
+            autocomplete="nickname" /></label
+        ><label class="form-label"
+          >Game mode<select id="multiplayer-mode">
+            <option value="coop">Co-op · defend against the rival</option>
+            <option value="versus">Versus · conquer each other's keep</option>
+          </select></label
+        ><button id="create-room" class="primary">Create a room →</button>
+        <div class="join-row">
+          <input
+            id="room-code"
+            maxlength="12"
+            placeholder="ROOM CODE"
+            aria-label="Room code"
+            autocomplete="off"
+          /><button id="join-room">Join room</button>
+        </div>
+        <p id="network-error" role="status"></p>
+        <button data-back class="secondary">Back to main menu</button>
+      </section>
+      <section id="lobby" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">YOUR BATTLE STANDARD</div>
+        <h1>Room <span id="lobby-code"></span></h1>
+        <p id="lobby-copy">Waiting for your ally…</p>
+        <div id="lobby-players"></div>
+        <button id="start-room" class="primary">Begin the battle →</button
+        ><button id="leave-room" class="secondary">Leave room</button>
+      </section>
+      <section id="stockpile" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">THE CARAVAN LEDGER</div>
+        <h1>Stockpile & trade.</h1>
+        <p>
+          Trade requires a market. Goods are bought and sold in lots of ten; gold changes
+          immediately.
+        </p>
+        <div id="stockpile-list"></div>
+        <button data-close class="primary">Return to the valley →</button>
+      </section>
+      <section id="guide" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">THE FIELD GUIDE</div>
+        <h1>A lord's first orders</h1>
+        <p>
+          Grow a working population, keep popularity at fifty-five or higher, and defend your keep.
+          Construction and recruitment costs appear in the ledger.
+        </p>
+        <ol>
+          <li>
+            <b>Feed your people.</b> Date orchards supply food directly. Wheat → mill → bakery makes
+            bread. Hop farms → brewery supplies ale. Farms require fertile green ground.
+          </li>
+          <li>
+            <b>Rule the settlement.</b> Town gardens improve popularity and troop damage while
+            slowing production; gallows reverse the tradeoff. Select a workplace to pause it,
+            releasing its workers and stopping its resource inputs and outputs.
+          </li>
+          <li>
+            <b>Arm the levy.</b> Wood → fletcher → bows; iron → blacksmith → swords; iron → armorer
+            → armor. Build the required recruiting building before raising troops. Mercenaries cost
+            gold and need a mercenary post.
+          </li>
+          <li>
+            <b>Control fire.</b> Slaves, fire throwers and pitch traps ignite flammable buildings.
+            Fires burn for 24 seconds at 6 HP/s and spread across touching buildings, including
+            friendly ones. Leave a full tile gap as a firebreak. Wells need two workers and suppress
+            one nearby fire within seven tiles; staffing controls effectiveness. Range is abstract,
+            without water hauling. Burning workplaces and recruitment stop; repair waits until the
+            fire is out. Select a recruiting facility to set or clear its rally point.
+          </li>
+          <li>
+            <b>Build a fortress.</b> Walls hold the enemy; gatehouses control passage. Towers fire
+            automatically. Garrison ranged soldiers in towers for protection and range. Walls,
+            closed gates, keeps and towers block ground-level ranged fire. Tower fire and shots to
+            or from elevated garrisons clear low walls and gates; other keeps and towers still
+            obstruct them. Ground shots at tower foundations remain blocked by walls and closed
+            gates.
+          </li>
+          <li>
+            <b>Lead the siege.</b> Select troops then right-click a hostile soldier or building to
+            attack. Right-click ground to move. A then click orders an attack move; G then click a
+            friendly tower garrisons. Catapults and trebuchets arc shots over fortifications; rams
+            must reach their target.
+          </li>
+        </ol>
+        <p>
+          Rival lords rebuild industries, buy supplies, repair safe buildings and defend their keep.
+          The Emir balances growth and war; the Wolf raids exposed workshops early; the Warden
+          garrisons towers and gathers larger, escorted expeditions.
+        </p>
+        <div class="guide-controls">
+          <span><kbd>WASD</kbd> / arrows · pan</span><span><kbd>Wheel</kbd> · zoom</span
+          ><span><kbd>Space</kbd> · pause local game</span><span><kbd>H</kbd> · home</span
+          ><span><kbd>Ctrl 1–9</kbd> · store group</span><span><kbd>1–9</kbd> · recall group</span
+          ><span><kbd>Esc</kbd> · cancel / menu</span><span><kbd>Shift</kbd> · add selection</span>
+        </div>
+        <button data-close class="primary">Return →</button>
+      </section>
+      <section id="settings" class="modal guide" hidden role="dialog" aria-modal="true">
+        <div class="eyebrow">YOUR PREFERENCES</div>
+        <h1>Settings & controls.</h1>
+        <label class="form-label"
+          >Original interface sounds<select id="sound">
+            <option value="off">Off</option>
+            <option value="on">On</option>
+          </select></label
+        ><label class="form-label"
+          >Camera speed<input id="camera-speed" type="range" min="5" max="24" value="12"
+        /></label>
+        <p>
+          WASD / arrows pan · H centers on the keep · Wheel zooms · Space pauses · A attack move · G
+          garrison · Ctrl+1–9 saves groups · 1–9 recalls groups · Esc cancels.
+        </p>
+        <button data-close class="primary">Return →</button>
+      </section>
+      <section
+        id="battle-menu"
+        class="modal guide"
+        hidden
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="battle-menu-title"
+      >
+        <div class="eyebrow">YOUR STANDARD STILL FLIES</div>
+        <h1 id="battle-menu-title">The battle continues.</h1>
+        <p>
+          The shared battle keeps running while this menu is open. Return to command your realm, or
+          choose to leave the room.
+        </p>
+        <button id="resume-battle" class="primary">Resume battle →</button>
+        <button id="request-leave" class="secondary">Leave battle…</button>
+      </section>
+      <section
+        id="leave-confirm"
+        class="modal guide"
+        hidden
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="leave-title"
+      >
+        <div class="eyebrow">LOWER YOUR STANDARD</div>
+        <h1 id="leave-title">Leave this battle?</h1>
+        <p>
+          Leaving an active battle ends the room for both players. Your current online kingdom
+          cannot be saved.
+        </p>
+        <button id="confirm-leave" class="primary">Leave battle and return to menu</button>
+        <button id="cancel-leave" class="secondary">Stay in the battle</button>
+      </section>
+      <section id="result" class="modal result" hidden role="dialog" aria-modal="true">
+        <div class="intro-emblem" id="result-icon">♜</div>
+        <div class="eyebrow">THE VALLEY REMEMBERS</div>
+        <h1 id="result-title"></h1>
+        <p id="result-copy"></p>
+        <div id="result-stats" class="result-stats"></div>
+        <button id="next-mission" class="primary" hidden>Continue the campaign →</button
+        ><button id="play-again" class="primary">Begin a new kingdom →</button
+        ><button id="result-menu" class="secondary">Main menu</button>
+      </section>
+    </div>
+    <script type="module" src="/src/client/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,488 @@
+.world-label {
+  position: absolute;
+  top: 23px;
+  left: 26px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font:
+    10px Arial,
+    sans-serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #635337;
+  pointer-events: none;
+  text-shadow: 0 1px #e8d3a5;
+  font-size: 9px;
+}
+
+.parchment {
+  background: linear-gradient(110deg, #eee2beed, #e6d4a9e8);
+  border: 1px solid #bba16b;
+  box-shadow:
+    0 5px 18px #5f462b20,
+    inset 0 0 15px #c1a67320;
+}
+
+.objectives {
+  position: absolute;
+  left: 24px;
+  top: 62px;
+  width: 224px;
+  padding: 18px 19px;
+  max-width: 215px;
+}
+
+.tutorial-item {
+  display: flex;
+  gap: 9px;
+  align-items: start;
+  font:
+    11px Arial,
+    sans-serif;
+  line-height: 1.45;
+  color: #71624a;
+  margin: 10px 0;
+}
+
+.wave-banner {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  align-items: center;
+  gap: 20px;
+  background: #2c3028e8;
+  box-shadow: 0 3px 15px #31271926;
+  border: 1px solid #9b8655;
+  color: #e8d9b0;
+  display: block;
+  text-align: right;
+  padding: 10px 14px;
+  min-width: 175px;
+}
+
+.camera-tools {
+  position: absolute;
+  bottom: 40px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  background: #31372ddd;
+  border: 1px solid #a58f5e;
+  color: #d5c397;
+  gap: 1px;
+}
+
+.world-controls {
+  position: absolute;
+  bottom: 13px;
+  left: 25px;
+  font:
+    9px Arial,
+    sans-serif;
+  color: #6d5d3c;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+  text-shadow: 0 1px #e5cea1;
+  font-size: 9px;
+}
+
+.world-label small {
+  font:
+    9px Georgia,
+    serif;
+  letter-spacing: 1px;
+}
+
+.objectives h2 {
+  font-weight: normal;
+  margin: 9px 0;
+  font-size: 23px;
+}
+
+.objectives p {
+  line-height: 1.65;
+  color: #77654a;
+  margin: 0 0 15px;
+  font-size: 11px;
+}
+
+.wave-banner span {
+  font:
+    8px Arial,
+    sans-serif;
+  letter-spacing: 1.8px;
+  color: #b6a578;
+}
+
+.wave-banner b {
+  display: block;
+  font-size: 17px;
+  font-weight: normal;
+  margin-top: 6px;
+}
+
+.wave-banner > span {
+  color: #d0b980;
+  border-left: 1px solid #796745;
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  font:
+    7px Arial,
+    sans-serif;
+  letter-spacing: 1.4px;
+  display: block;
+}
+
+.camera-tools button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font:
+    20px Georgia,
+    serif;
+  width: 31px;
+  height: 31px;
+}
+
+.camera-tools span {
+  font:
+    9px Arial,
+    sans-serif;
+  width: 35px;
+  text-align: center;
+}
+
+.world-controls i {
+  margin: 0 9px;
+  font-style: normal;
+  color: #a08655;
+}
+
+.wave-banner > b {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.world-label .tiny-diamond {
+  font-size: 22px;
+}
+
+.world-label .line {
+  width: 38px;
+  height: 1px;
+  background: #927a4b88;
+}
+
+.tutorial-item .check {
+  border: 1px solid #ae996d;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  font-size: 10px;
+  text-align: center;
+  color: #e6dcb8;
+  background: #d6c498;
+}
+
+.tutorial-item.done {
+  color: #8a826b;
+}
+
+.tutorial-item.active {
+  color: #3d553e;
+}
+
+.objectives .text-button {
+  margin-top: 10px;
+  border-top: 1px solid #beaa7d6b;
+  padding-top: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.wave-banner.danger {
+  border-color: #ac6449;
+}
+
+.wave-banner.danger b {
+  color: #e8b291;
+}
+
+.camera-tools button:hover {
+  background: #b7a47233;
+}
+
+.camera-tools button:last-child {
+  border-left: 1px solid #b49a5b55;
+  font-size: 22px;
+}
+
+.tutorial-item.done .check {
+  background: #63856f;
+  border-color: #63856f;
+}
+
+#battlefield {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  background: #c9aa75;
+}
+
+#world {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: default;
+  outline: none;
+}
+
+#compact-objective {
+  position: absolute;
+  left: 24px;
+  top: 62px;
+}
+
+#toast {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  opacity: 0;
+  transition: 0.2s;
+  max-width: 440px;
+  pointer-events: none;
+  background: #2a302aef;
+  color: #e5d6ae;
+  padding: 12px 18px;
+  border: 1px solid #b29961;
+  font:
+    12px Arial,
+    sans-serif;
+  text-align: center;
+  line-height: 1.5;
+  z-index: 4;
+  box-shadow: 0 4px 15px #0003;
+}
+
+#placement-hint {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #283b32e8;
+  color: #eddfba;
+  border: 1px solid #a5af7c;
+  font:
+    11px Arial,
+    sans-serif;
+  padding: 9px 14px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#show-objectives {
+  position: absolute;
+  left: 18px;
+  top: 60px;
+  background: #e5d6b2d9;
+  border: 1px solid #a99262;
+  color: #6c6145;
+  font-size: 10px;
+  padding: 8px;
+}
+
+#compact-objective button {
+  background: #e6d6b3dd;
+  border: 1px solid #b59d6b;
+  color: #74603f;
+  padding: 10px;
+  font:
+    10px Arial,
+    sans-serif;
+}
+
+#toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+#placement-hint.invalid {
+  background: #633c2ee8;
+  border-color: #b77d59;
+}
+
+@media (width <= 1150px) {
+  .wave-banner {
+    right: 16px;
+  }
+
+  .world-label small,
+  .world-label .line {
+    display: none;
+  }
+}
+
+@media (width <= 900px) {
+  .objectives {
+    width: 198px;
+    left: 15px;
+    top: 56px;
+    padding: 14px;
+  }
+
+  .tutorial-item {
+    font-size: 10px;
+  }
+
+  .wave-banner {
+    padding: 10px;
+    gap: 10px;
+    top: 18px;
+  }
+
+  .world-label {
+    left: 16px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    top: 17px;
+  }
+
+  .world-controls {
+    font-size: 8px;
+    left: 15px;
+  }
+
+  .objectives h2 {
+    font-size: 22px;
+  }
+
+  .objectives p {
+    font-size: 11px;
+  }
+
+  .wave-banner span {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+
+  .wave-banner b {
+    font-size: 13px;
+  }
+
+  .wave-banner > span {
+    font-size: 13px;
+    padding-left: 10px;
+  }
+
+  .world-controls i {
+    margin: 0 4px;
+  }
+}
+
+@media (width <= 1100px) {
+  .world-label small {
+    display: none;
+  }
+}
+
+@media (width <= 800px) {
+  .wave-banner {
+    right: 10px;
+    top: 13px;
+    min-width: 0;
+    padding: 9px;
+  }
+
+  .world-label {
+    left: 12px;
+    top: 17px;
+    font-size: 7px;
+  }
+
+  .objectives {
+    left: 12px;
+    top: 50px;
+    max-width: 180px;
+    padding: 14px;
+  }
+
+  .world-controls {
+    display: none;
+  }
+
+  .camera-tools {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .wave-banner > b {
+    font-size: 12px;
+  }
+
+  .objectives h2 {
+    font-size: 20px;
+  }
+
+  .objectives p {
+    font-size: 10px;
+  }
+}
+
+@media (width <= 580px) {
+  .wave-banner {
+    top: 43px;
+    left: 10px;
+    right: auto;
+    text-align: left;
+  }
+
+  .world-label {
+    font-size: 7px;
+  }
+
+  .objectives {
+    display: none;
+  }
+
+  .camera-tools {
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .camera-tools button {
+    width: 24px;
+    height: 24px;
+  }
+
+  .camera-tools span {
+    font-size: 8px;
+  }
+
+  .world-label small {
+    display: none;
+  }
+
+  #show-objectives {
+    display: none;
+  }
+
+  #toast {
+    max-width: calc(100% - 20px);
+    width: 330px;
+    font-size: 10px;
+    padding: 9px;
+    bottom: 45px;
+  }
+
+  #placement-hint {
+    font-size: 9px;
+    white-space: normal;
+    width: calc(100% - 20px);
+    bottom: 43px;
+  }
+}

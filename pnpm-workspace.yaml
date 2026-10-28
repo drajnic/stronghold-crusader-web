@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+confirmModulesPurge: false
+scriptsPrependNodePath: true
+storeDir: work/pnpm-store
+cacheDir: work/cache

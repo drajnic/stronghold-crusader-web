@@ -1,0 +1,91 @@
+.guide {
+  text-align: left;
+  width: 620px;
+  padding: 34px 40px;
+}
+
+.guide-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  font:
+    10px Arial,
+    sans-serif;
+  color: #8a7957;
+  margin: 22px 0 25px;
+}
+
+.guide h1 {
+  margin: 13px 0 18px;
+  font-size: 35px;
+}
+
+.guide p,
+.guide li {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #7e6b4d;
+}
+
+.guide ol {
+  padding-left: 19px;
+}
+
+.guide li {
+  padding-left: 6px;
+  margin: 12px 0;
+}
+
+.guide-controls kbd {
+  font:
+    9px Arial,
+    sans-serif;
+  background: #d4c195;
+  border: 1px solid #b39b6b;
+  border-radius: 2px;
+  color: #645637;
+  padding: 3px 5px;
+}
+
+.guide li b {
+  color: #50604c;
+}
+
+.guide .primary {
+  margin-top: 20px;
+}
+
+@media (height <= 760px) {
+  .guide-controls {
+    margin: 15px 0;
+    gap: 8px;
+  }
+
+  .guide h1 {
+    font-size: 32px;
+  }
+
+  .guide p,
+  .guide li {
+    font-size: 12px;
+  }
+
+  .guide li {
+    margin: 8px 0;
+  }
+}
+
+@media (width <= 580px) {
+  .guide-controls {
+    font-size: 9px;
+  }
+
+  .guide h1 {
+    font-size: 29px;
+  }
+
+  .guide p,
+  .guide li {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,155 @@
+.map-editor {
+  width: min(1500px, 96vw);
+  max-height: 94vh;
+  overflow: auto;
+  padding: 24px;
+  text-align: left;
+}
+
+.map-editor header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.map-editor h1 {
+  margin: 4px 0 20px;
+}
+
+.map-workspace {
+  display: grid;
+  grid-template-columns: 220px minmax(300px, 1fr) 240px;
+  gap: 20px;
+}
+
+.map-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.map-tools label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.map-tools input,
+.map-tools textarea,
+.map-tools select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.map-tools textarea {
+  resize: vertical;
+}
+
+.map-tools small,
+.map-canvas-wrap small {
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.map-actions button {
+  flex: 1;
+  font-size: 11px;
+}
+
+.map-canvas-wrap canvas {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  image-rendering: pixelated;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+#map-issues {
+  max-height: 180px;
+  overflow: auto;
+  font-size: 11px;
+}
+
+#map-issues p {
+  margin: 0 0 5px;
+}
+
+#map-status {
+  font-size: 12px;
+  color: #55442b;
+}
+
+@media (width <= 1000px) {
+  .map-workspace {
+    grid-template-columns: 180px minmax(280px, 1fr);
+  }
+
+  .map-workspace > .map-tools:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.map-editor button {
+  border: 1px solid #a9905d;
+  border-radius: 3px;
+  padding: 9px 12px;
+  background: linear-gradient(#f4e7c7, #ddc79b);
+  color: #423a29;
+  font:
+    600 12px Georgia,
+    serif;
+  box-shadow: inset 0 1px #fff8;
+  cursor: pointer;
+}
+
+.map-editor button:hover {
+  border-color: #547a6d;
+  background: #e9dfbd;
+}
+
+.map-editor button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.map-editor button.primary {
+  background: linear-gradient(#437c72, #285c56);
+  color: #fff3d0;
+  border-color: #234c46;
+}
+
+.map-editor input,
+.map-editor select,
+.map-editor textarea {
+  border: 1px solid #ad9566;
+  border-radius: 3px;
+  padding: 8px;
+  background: #fff5dbb3;
+  color: #423a29;
+  font:
+    12px Georgia,
+    serif;
+}
+
+.map-editor :focus-visible {
+  outline: 2px solid #286d66;
+  outline-offset: 2px;
+}
+
+#map-draft-state {
+  color: #38645a;
+  font:
+    600 11px Georgia,
+    serif;
+}
