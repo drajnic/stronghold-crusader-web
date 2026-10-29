@@ -1,5 +1,5 @@
 import type { BuildingType, GameState, Point } from '../../game/index.js';
-import { SIZE, TYPES, terrain } from '../../game/index.js';
+import { TYPES, terrain } from '../../game/index.js';
 import { WELL_RANGE } from '../../game/fire.js';
 import { staticPositionClear } from '../../game/spatial.js';
 import { building, buildingShadow } from './buildings.js';
@@ -7,7 +7,7 @@ import { DrawingSurface, teamColor } from './drawing.js';
 import { EnvironmentScene } from './environment.js';
 import { visualTime as presentationTime } from './clock.js';
 import { drawCombatEffects } from './combat-effects.js';
-import { cacheTerrain } from './terrain.js';
+import { drawTerrain } from './terrain.js';
 import { unit, unitGround, villager } from './units.js';
 import {
   buildingFootprint,
@@ -47,17 +47,7 @@ export class Renderer extends DrawingSurface {
     gradient.addColorStop(1, '#bda06c');
     c.fillStyle = gradient;
     c.fillRect(0, 0, this.width, this.height);
-    if (!this.terrainCache) cacheTerrain(this);
-    const origin = this.project(0, 0);
-    const cachedTerrain = this.terrainCache;
-    if (!cachedTerrain) return;
-    c.drawImage(
-      cachedTerrain,
-      origin.x - cachedTerrain.width * 0.5 * z,
-      origin.y,
-      cachedTerrain.width * z,
-      cachedTerrain.height * z,
-    );
+    drawTerrain(this);
     const decor: (DepthItem & { draw: () => void })[] = [];
     const garrisons = new Map<number, typeof s.units>();
     for (const u of s.units) {
@@ -311,31 +301,35 @@ export class Renderer extends DrawingSurface {
     if (!c) return;
     const w = canvas.width,
       h = canvas.height,
-      k = w / SIZE;
+      k = w / s.map.width;
     if (!this.minimapGround || this.minimapGround.width !== w || this.minimapGround.height !== h) {
       const cache = document.createElement('canvas');
       cache.width = w;
       cache.height = h;
       const context = cache.getContext('2d');
       if (!context) return;
-      context.fillStyle = '#d3b47b';
-      context.fillRect(0, 0, w, h);
-      for (let y = 0; y < SIZE; y++)
-        for (let x = 0; x < SIZE; x++) {
-          const t = terrain(x, y, s.map);
-          if (t === 'sand') continue;
-          context.fillStyle = {
-            void: '#d3b47b',
-            sand: '#d3b47b',
-            water: '#438f94',
-            trees: '#668047',
-            stone: '#b5a586',
-            grass: '#95aa61',
-            iron: '#827b63',
-            pitch: '#514d38',
-          }[t];
-          context.fillRect(x * k, y * k, k + 1, k + 1);
+      const pixels = context.createImageData(w, h);
+      const colors = {
+        void: [211, 180, 123],
+        sand: [211, 180, 123],
+        water: [67, 143, 148],
+        trees: [102, 128, 71],
+        stone: [181, 165, 134],
+        grass: [149, 170, 97],
+        iron: [130, 123, 99],
+        pitch: [81, 77, 56],
+      };
+      // Sample at minimap resolution: map area must not dictate Canvas API calls.
+      for (let y = 0; y < h; y++)
+        for (let x = 0; x < w; x++) {
+          const color = colors[terrain(Math.floor(x / k), Math.floor(y / k), s.map)];
+          const offset = (y * w + x) * 4;
+          pixels.data[offset] = color[0];
+          pixels.data[offset + 1] = color[1];
+          pixels.data[offset + 2] = color[2];
+          pixels.data[offset + 3] = 255;
         }
+      context.putImageData(pixels, 0, 0);
       this.minimapGround = cache;
     }
     c.drawImage(this.minimapGround, 0, 0);

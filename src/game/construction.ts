@@ -1,5 +1,5 @@
 import { isBuildingType, isTroopType } from './action-schema.js';
-import { TYPES, TROOPS, SIZE, MAX_UNITS } from './catalog.js';
+import { TYPES, TROOPS, MAX_UNITS, MAX_BUILDINGS } from './catalog.js';
 import { cells, buildingAt, terrain, nearTerrain } from './map.js';
 import { factionFor, affordable, spend } from './economy.js';
 import { addBuilding, addUnit, findOpen } from './entities.js';
@@ -15,6 +15,11 @@ export function canPlace(
 ): ActionResult {
   if (!isBuildingType(type) || type === 'keep')
     return { ok: false, reason: 'Choose a construction.' };
+  if (s.buildings.length >= MAX_BUILDINGS)
+    return {
+      ok: false,
+      reason: `The battlefield building limit (${MAX_BUILDINGS}) has been reached.`,
+    };
   const d = TYPES[type];
   if (s.status !== 'playing' || !factionFor(s, team) || factionFor(s, team)?.defeated)
     return { ok: false, reason: 'This lord cannot build.' };
@@ -23,8 +28,8 @@ export function canPlace(
     !Number.isInteger(y) ||
     x < 1 ||
     y < 1 ||
-    x + d.size > SIZE - 1 ||
-    y + d.size > SIZE - 1
+    x + d.size > s.map.width - 1 ||
+    y + d.size > s.map.width - 1
   )
     return { ok: false, reason: 'Build within the valley.' };
   for (const c of cells({ type, x, y })) {

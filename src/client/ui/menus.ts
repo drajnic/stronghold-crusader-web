@@ -81,17 +81,35 @@ export async function menu(app: ClientContext) {
   app.setModal('menu');
 }
 export function bindMenus(app: ClientContext): void {
+  let setupMode: 'skirmish' | 'sandbox' | 'survival' = 'skirmish';
+  function configureSetup(mode: typeof setupMode) {
+    setupMode = mode;
+    document.querySelector('#skirmish h1')!.textContent =
+      mode === 'sandbox'
+        ? 'Build your kingdom.'
+        : mode === 'survival'
+          ? 'Prepare for the siege.'
+          : 'Choose your rival.';
+    document.querySelector('#skirmish p')!.textContent =
+      mode === 'sandbox'
+        ? 'Choose a map and build at your own pace. Call an invasion when ready.'
+        : mode === 'survival'
+          ? 'Choose a map, raise your defenses and survive four raids.'
+          : 'Build an economy, arm your soldiers and destroy the rival keep while protecting your own.';
+    $('opponent').closest('label')!.hidden = mode !== 'skirmish';
+  }
   for (const b of document.querySelectorAll<HTMLButtonElement>('[data-open]'))
     b.onclick = () => {
       app.returnModal = 'menu';
+      if (b.dataset.open === 'skirmish') configureSetup('skirmish');
       app.setModal(b.dataset.open as Modal);
     };
   for (const b of document.querySelectorAll<HTMLButtonElement>('[data-mode]'))
-    b.onclick = () =>
-      app.begin({
-        mode: b.dataset.mode === 'sandbox' ? 'sandbox' : 'survival',
-        difficulty: 'normal',
-      });
+    b.onclick = () => {
+      configureSetup(b.dataset.mode === 'sandbox' ? 'sandbox' : 'survival');
+      app.returnModal = 'menu';
+      app.setModal('skirmish');
+    };
   for (const b of document.querySelectorAll<HTMLButtonElement>('[data-back]'))
     b.onclick = () => app.setModal('menu');
   for (const b of document.querySelectorAll<HTMLButtonElement>('[data-close]'))
@@ -101,18 +119,27 @@ export function bindMenus(app: ClientContext): void {
     if (b && !b.disabled)
       app.begin({ mode: 'campaign', scenario: Number(b.dataset.scenario), difficulty: 'normal' });
   };
-  $('start-skirmish').onclick = () =>
-    app.begin({
-      mode: 'skirmish',
-      map: getSelectedMap('skirmish-map'),
-      difficulty:
-        $('difficulty').value === 'easy'
-          ? 'easy'
-          : $('difficulty').value === 'hard'
-            ? 'hard'
-            : 'normal',
-      scenario: Number($('opponent').value),
-    });
+  const setupError = document.createElement('p');
+  setupError.setAttribute('role', 'alert');
+  $('start-skirmish').before(setupError);
+  $('start-skirmish').onclick = () => {
+    setupError.textContent = '';
+    try {
+      app.begin({
+        mode: setupMode,
+        map: getSelectedMap('skirmish-map'),
+        difficulty:
+          $('difficulty').value === 'easy'
+            ? 'easy'
+            : $('difficulty').value === 'hard'
+              ? 'hard'
+              : 'normal',
+        scenario: Number($('opponent').value),
+      });
+    } catch (error) {
+      setupError.textContent = error instanceof Error ? error.message : String(error);
+    }
+  };
   $('resume').onclick = () => app.setModal(null);
   $('menu-button').onclick = () => app.menu();
   $('help').onclick = () => {

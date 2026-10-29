@@ -8,7 +8,7 @@ function add(s: m.GameState, type: m.BuildingType, team: m.Team = 'player') {
   return b;
 }
 function economy() {
-  const s = m.createGame({ mode: 'sandbox' });
+  const s = m.createGame({ map: m.SMALL_MAP, mode: 'sandbox' });
   s.buildings = [];
   s.factions.player.civilians = 2;
   s.rations = 0;
@@ -93,7 +93,7 @@ void test('service pause removes bonuses and fear does not change service consum
   assert.equal(s.resources.ale, 9.82);
 });
 void test('paused saves roundtrip optionally and malformed flags reject', () => {
-  const s = m.createGame({ mode: 'sandbox' });
+  const s = m.createGame({ map: m.SMALL_MAP, mode: 'sandbox' });
   const b = s.buildings.find((b) => m.TYPES[b.type].workers);
   assert.ok(b);
   b.paused = true;
@@ -115,7 +115,7 @@ void test('fear never creates labor and allied workplaces remain separately owne
   assert.equal(first.active, 1);
   assert.equal(second.active, 0);
   assert.ok(Math.abs(s.resources.flour - 1.575) < 1e-9);
-  const coop = m.createGame({ mode: 'multiplayer', multiplayerMode: 'coop' });
+  const coop = m.createGame({ map: m.SMALL_MAP, mode: 'multiplayer', multiplayerMode: 'coop' });
   const ally = add(coop, 'mill', 'player2');
   add(coop, 'garden', 'player2');
   assert.equal(m.fearFactor(coop).score, 0);
@@ -132,12 +132,12 @@ void test('fear never creates labor and allied workplaces remain separately owne
   );
 });
 void test('kind and fear buildings spend their actual costs and politics uses the displayed target', () => {
-  const s = m.createGame({ mode: 'sandbox' });
+  const s = m.createGame({ map: m.SMALL_MAP, mode: 'sandbox' });
   for (const type of ['garden', 'gallows'] as const) {
     const before = { ...s.resources };
     let built = false;
-    for (let y = 1; y < m.SIZE - 3 && !built; y++)
-      for (let x = 1; x < m.SIZE - 3 && !built; x++)
+    for (let y = 1; y < s.map.width - 3 && !built; y++)
+      for (let x = 1; x < s.map.width - 3 && !built; x++)
         if (m.canPlace(s, type, x, y).ok) built = m.place(s, type, x, y).ok;
     assert.equal(built, true);
     for (const key of m.RESOURCE_KEYS)

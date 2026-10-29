@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from '../src/server/host.js';
-import { DEFAULT_MAP, parseMap, mapFingerprint } from '../src/game/index.js';
+import {
+  LARGE_MAP,
+  SMALL_MAP,
+  MAX_MAP_UPLOAD_BYTES,
+  parseMap,
+  mapFingerprint,
+} from '../src/game/index.js';
 import { parseReply } from '../src/shared/protocol.js';
 
 void test('custom maps remain authoritative through HTTP, SSE, parallel rooms and reconnect', async (t) => {
@@ -24,17 +30,21 @@ void test('custom maps remain authoritative through HTTP, SSE, parallel rooms an
     });
     return parseReply(await response.json(), response.status);
   };
-  const map = parseMap({ ...DEFAULT_MAP, name: 'Shared oasis', author: 'Host' });
+  const map = parseMap({ ...LARGE_MAP, name: 'Shared oasis', author: 'Host' });
   for (const bad of [
+    { ...SMALL_MAP, width: 64, height: 64, terrain: Array(64).fill('s'.repeat(64)) },
     { ...map, width: 63 },
     { ...map, terrain: ['s'] },
-    { ...map, terrain: Array.from({ length: 64 }, () => 'w'.repeat(64)) },
+    { ...map, terrain: Array.from({ length: 128 }, () => 'w'.repeat(128)) },
   ]) {
     const reply = await post('/api/rooms', { map: bad });
     assert.equal(reply.httpStatus, 400);
     assert.match(reply.reason || '', /Invalid map/);
   }
-  assert.equal((await post('/api/rooms', { map, padding: 'x'.repeat(33000) })).httpStatus, 413);
+  assert.equal(
+    (await post('/api/rooms', { map, padding: 'x'.repeat(MAX_MAP_UPLOAD_BYTES) })).httpStatus,
+    413,
+  );
   const host = await post('/api/rooms', {
     map,
     mapFingerprint: 'untrusted',
@@ -50,7 +60,7 @@ void test('custom maps remain authoritative through HTTP, SSE, parallel rooms an
   const code = host.view.code;
   const guest = await post(`/api/rooms/${code}/join`, {
     name: 'Guest',
-    map: { ...map, name: 'Guest override' },
+    map: { width: 64, name: 'Ignored unsupported guest override' },
   });
   assert.ok(guest.view);
   assert.ok(guest.token);
@@ -91,7 +101,7 @@ void test('custom maps remain authoritative through HTTP, SSE, parallel rooms an
   };
   const h = await connect(host.token),
     g = await connect(guest.token);
-  const started = await post(`/api/rooms/${code}/start`, { map: DEFAULT_MAP }, host.token);
+  const started = await post(`/api/rooms/${code}/start`, { map: { width: 64 } }, host.token);
   assert.equal(started.httpStatus, 200);
   assert.deepEqual(started.view?.state?.map, map);
   for (const connection of [h, g]) {
@@ -108,7 +118,12 @@ void test('custom maps remain authoritative through HTTP, SSE, parallel rooms an
       'wrong room context rejected',
     );
     const hydrated = parseReply({ ok: true, view: raw }, 200, map);
-    assert.deepEqual(hydrated.view?.state?.map, map);
+    assert.equal(hydrated.view?.map, map, 'unchanged snapshots retain the immutable map identity');
+    assert.equal(hydrated.view?.state?.map, map, 'state hydration retains the same map');
+    assert.ok(
+      JSON.stringify(raw).length < JSON.stringify(map).length / 5,
+      'steady updates exclude the 512-cell terrain payload',
+    );
   }
   const probe = async (token: string) => {
     const response = await fetch(`${base}/api/session?code=${code}`, {

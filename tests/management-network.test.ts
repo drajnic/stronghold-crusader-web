@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createServer } from '../src/server/host.js';
 import { parseReply, parseView } from '../src/shared/protocol.js';
 import type { MultiplayerView, GameSnapshot } from '../src/shared/protocol.js';
-import { canPlace, deserialize, fearFactor, SIZE } from '../src/game/index.js';
+import { SMALL_MAP, canPlace, deserialize, fearFactor } from '../src/game/index.js';
 import type { Building } from '../src/game/index.js';
 const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 async function waitFor<T>(check: () => T, label: string, timeout = 3500): Promise<NonNullable<T>> {
@@ -88,6 +88,7 @@ void test(
       return { status: response.status, ...parseReply(await response.json(), response.status) };
     }
     const host = await post('/api/rooms', {
+      map: SMALL_MAP,
       name: 'Host',
       multiplayerMode: 'coop',
       difficulty: 'normal',
@@ -167,8 +168,8 @@ void test(
     );
     const local = deserialize(JSON.stringify({ ...state(first.latest), version: 3 }));
     let site: { x: number; y: number } | undefined;
-    for (let y = 1; y < SIZE - 3 && !site; y++)
-      for (let x = 1; x < SIZE - 3 && !site; x++)
+    for (let y = 1; y < SMALL_MAP.width - 3 && !site; y++)
+      for (let x = 1; x < SMALL_MAP.width - 3 && !site; x++)
         if (canPlace(local, 'garden', x, y).ok) site = { x, y };
     assert.ok(site);
     assert.equal(

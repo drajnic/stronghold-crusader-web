@@ -8,7 +8,8 @@ import {
   update,
   parseMap,
   validateMap,
-  DEFAULT_MAP,
+  SMALL_MAP,
+  MAX_MAP_UPLOAD_BYTES,
   mapFingerprint,
 } from '../game/index.js';
 import type { ActionResult, GameOptions, GameState } from '../game/index.js';
@@ -127,7 +128,7 @@ export function createServer({
         if (!rate(`ip:${ip}`, 240))
           return json(res, 429, { ok: false, reason: 'Too many requests.' });
         if (req.method === 'POST' && url.pathname === '/api/rooms') {
-          const data = await body(req, 32768);
+          const data = await body(req, MAX_MAP_UPLOAD_BYTES);
           if (!rate(`create:${ip}`, 20, 60000))
             return json(res, 429, {
               ok: false,
@@ -144,7 +145,7 @@ export function createServer({
             return json(res, 400, { ok: false, reason: 'Invalid game options.' });
           let map;
           try {
-            map = parseMap(data.map === undefined ? DEFAULT_MAP : data.map);
+            map = parseMap(data.map === undefined ? SMALL_MAP : data.map);
             const validation = validateMap(map);
             if (validation.errors.length) throw Error(validation.errors.join(' '));
           } catch (error) {

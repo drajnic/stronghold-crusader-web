@@ -1,6 +1,7 @@
 import { getSelectedMap } from './map-library.js';
 import { resetOfflineSession } from './session-state.js';
-import { deserialize, encodeMap } from '../../game/index.js';
+import { encodeMap } from '../../game/index.js';
+import type { GameState } from '../../game/index.js';
 import type { ClientContext } from '../context.js';
 import { MultiplayerSession } from '../network.js';
 import { element as $, errorMessage, esc, optionalElement } from './dom.js';
@@ -57,14 +58,8 @@ export function bindConnection(app: ClientContext): void {
       app.online = true;
       app.team = view.team;
       if (view.state) {
-        const incoming = typeof view.state === 'string' ? view.state : JSON.stringify(view.state);
-        const next = deserialize(incoming, { rebuildPaths: false });
-        const rawView = view.state;
-        if (Array.isArray(rawView.events))
-          next.events = rawView.events
-            .filter((e) => e && typeof e.text === 'string' && Number.isFinite(e.time))
-            .slice(-10)
-            .map((e) => ({ text: e.text.slice(0, 500), time: e.time }));
+        // parseView has already validated and hydrated this snapshot, including aliases.
+        const next = view.state as GameState;
         app.networkMotion = {
           at: performance.now(),
           from: new Map(

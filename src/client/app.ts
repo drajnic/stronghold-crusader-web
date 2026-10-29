@@ -12,7 +12,7 @@ import type {
   TroopType,
   Unit,
 } from '../game/index.js';
-import { SIZE, applyAction, createGame, factionFor, resourcesFor, update } from '../game/index.js';
+import { applyAction, createGame, factionFor, resourcesFor, update } from '../game/index.js';
 import type {
   CampaignProgress,
   ClientContext,
@@ -82,8 +82,8 @@ export class GameApplication implements ClientContext {
   notices = new ToastPresenter($('toast'));
   center = () => {
     const k = this.state.buildings.find((b) => this.owned(b) && b.type === 'keep');
-    this.renderer.camera.x = k ? k.x + 1.5 : SIZE / 2;
-    this.renderer.camera.y = k ? k.y + 1.5 : SIZE / 2;
+    this.renderer.camera.x = k ? k.x + 1.5 : this.state.map.width / 2;
+    this.renderer.camera.y = k ? k.y + 1.5 : this.state.map.width / 2;
   };
   clearSelection = () => {
     this.selected.clear();
@@ -155,11 +155,11 @@ export class GameApplication implements ClientContext {
         pan = (elapsed * this.settings.cameraSpeed) / this.renderer.camera.zoom;
       this.renderer.camera.x = Math.max(
         0,
-        Math.min(SIZE, this.renderer.camera.x + (dx + dy) * pan),
+        Math.min(this.state.map.width, this.renderer.camera.x + (dx + dy) * pan),
       );
       this.renderer.camera.y = Math.max(
         0,
-        Math.min(SIZE, this.renderer.camera.y + (dy - dx) * pan),
+        Math.min(this.state.map.height, this.renderer.camera.y + (dy - dx) * pan),
       );
       if (!this.online && !this.paused) {
         this.accumulator += elapsed * this.speed;

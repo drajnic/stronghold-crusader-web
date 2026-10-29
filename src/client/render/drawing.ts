@@ -1,7 +1,7 @@
 import { arrowLoop } from './architecture.js';
 import { isMasonry, materialFace, tint } from './materials.js';
 import type { BuildingType, MapDefinition, Point, Team, Terrain } from '../../game/index.js';
-import { DEFAULT_MAP, SIZE, encodeMap, terrain } from '../../game/index.js';
+import { SMALL_MAP, encodeMap, terrain } from '../../game/index.js';
 export const teamColor = (team: Team): string =>
   ({ player: '#23898a', player2: '#456fbd', enemy: '#b8523f' })[team];
 const hash = (x: number, y: number): number => {
@@ -9,13 +9,16 @@ const hash = (x: number, y: number): number => {
   return a - Math.floor(a);
 };
 export class DrawingSurface {
-  map: MapDefinition = DEFAULT_MAP;
-  private mapIdentity = encodeMap(DEFAULT_MAP);
+  map: MapDefinition = SMALL_MAP;
+  private mapIdentity = encodeMap(SMALL_MAP);
+  private readonly mapIdentities = new WeakMap<MapDefinition, string>();
+
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   camera: { x: number; y: number; zoom: number };
   tiles: { x: number; y: number; t: Terrain; h: number }[];
-  terrainCache: HTMLCanvasElement | null;
+  terrainChunks = new Map<string, HTMLCanvasElement>();
+  terrainContours: { grass: Point[][]; water: Point[][] } | null = null;
   visualPositions: Map<number, Point>;
   width: number;
   height: number;
@@ -33,12 +36,12 @@ export class DrawingSurface {
     if (!context) throw new Error('Canvas 2D rendering is unavailable.');
     this.ctx = context;
     this.camera = { x: 16.5, y: 44.5, zoom: 0.83 };
-    this.tiles = Array.from({ length: SIZE * SIZE }, (_, i) => {
-      const x = i % SIZE,
-        y = Math.floor(i / SIZE);
+    this.tiles = Array.from({ length: this.map.width * this.map.height }, (_, i) => {
+      const x = i % this.map.width,
+        y = Math.floor(i / this.map.width);
       return { x, y, t: terrain(x, y), h: hash(x, y) };
     });
-    this.terrainCache = null;
+
     this.visualPositions = new Map();
     this.width = 0;
     this.height = 0;
@@ -49,12 +52,22 @@ export class DrawingSurface {
     this.selection = null;
   }
   setMap(map: MapDefinition): boolean {
-    const identity = encodeMap(map);
+    if (map === this.map) return false;
+    let identity = this.mapIdentities.get(map);
+    if (!identity) {
+      identity = encodeMap(map);
+      this.mapIdentities.set(map, identity);
+    }
     this.map = map;
     if (identity === this.mapIdentity) return false;
     this.mapIdentity = identity;
-    this.tiles = this.tiles.map((tile) => ({ ...tile, t: terrain(tile.x, tile.y, map) }));
-    this.terrainCache = null;
+    this.tiles = Array.from({ length: map.width * map.height }, (_, i) => {
+      const x = i % map.width,
+        y = Math.floor(i / map.width);
+      return { x, y, t: terrain(x, y, map), h: hash(x, y) };
+    });
+    this.terrainChunks.clear();
+    this.terrainContours = null;
     return true;
   }
   resize() {

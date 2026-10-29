@@ -1,7 +1,7 @@
 import { clampZoom, shouldIgnoreShortcut } from './interaction.js';
 import { hitRenderedUnit } from '../render/unit-picking.js';
 import type { Point, Unit } from '../../game/index.js';
-import { SIZE, TYPES, canPlace, hostile } from '../../game/index.js';
+import { TYPES, canPlace, hostile } from '../../game/index.js';
 import type { ClientContext } from '../context.js';
 import { element as $ } from './dom.js';
 export function pos(app: ClientContext, e: MouseEvent | PointerEvent | WheelEvent): Point {
@@ -160,7 +160,7 @@ export function bindInput(app: ClientContext): void {
         if (type === 'wall' && drag) {
           const dx = Math.floor(world.x) - Math.floor(p.world.x),
             dy = Math.floor(world.y) - Math.floor(p.world.y),
-            steps = Math.min(SIZE, Math.max(Math.abs(dx), Math.abs(dy)));
+            steps = Math.min(app.state.map.width, Math.max(Math.abs(dx), Math.abs(dy)));
           let count = 0;
           for (let i = 0; i <= steps; i++) {
             const result = await app.act(
@@ -213,8 +213,14 @@ export function bindInput(app: ClientContext): void {
   };
   $('minimap').onpointerdown = (e) => {
     const r = $('minimap').getBoundingClientRect();
-    app.renderer.camera.x = Math.max(0, Math.min(SIZE, ((e.clientX - r.left) / r.width) * SIZE));
-    app.renderer.camera.y = Math.max(0, Math.min(SIZE, ((e.clientY - r.top) / r.height) * SIZE));
+    app.renderer.camera.x = Math.max(
+      0,
+      Math.min(app.state.map.width, ((e.clientX - r.left) / r.width) * app.state.map.width),
+    );
+    app.renderer.camera.y = Math.max(
+      0,
+      Math.min(app.state.map.height, ((e.clientY - r.top) / r.height) * app.state.map.height),
+    );
   };
   window.onkeydown = (e) => {
     if (e.target instanceof Element && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName))

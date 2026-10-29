@@ -1,4 +1,4 @@
-import { parseMap, mapFingerprint, deserialize } from '../game/index.js';
+import { parseMap, mapFingerprint, deserializeSnapshot } from '../game/index.js';
 import type {
   ActionResult,
   Difficulty,
@@ -119,7 +119,7 @@ export function parseView(value: unknown, knownMap?: MapDefinition): Multiplayer
     if (!isRecord(value.state)) return invalid();
     if (value.state.map !== undefined && mapFingerprint(parseMap(value.state.map)) !== fingerprint)
       return invalid();
-    state = deserialize(JSON.stringify({ ...value.state, map }), { rebuildPaths: false });
+    state = deserializeSnapshot(value.state, map);
     if (
       mapFingerprint(state.map) !== fingerprint ||
       state.mode !== 'multiplayer' ||

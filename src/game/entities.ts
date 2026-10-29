@@ -1,4 +1,4 @@
-import { TYPES, TROOPS, SIZE } from './catalog.js';
+import { TYPES, TROOPS } from './catalog.js';
 import { invalidate } from './map.js';
 import { findFreePosition, staticPositionClear, unitRadius } from './spatial.js';
 import type { GameState, BuildingType, TroopType, Team, Building, Unit, Point } from './types.js';
@@ -25,7 +25,7 @@ export function addBuilding(
   return b;
 }
 export function addUnit(s: GameState, type: TroopType, team: Team, x: number, y: number): Unit {
-  const spawn = findFreePosition(s, { x, y }, type, undefined, SIZE);
+  const spawn = findFreePosition(s, { x, y }, type, undefined, s.map.width);
   if (!spawn) throw new Error('No free ground for this troop.');
   const u: Unit = {
     id: s.nextId++,
@@ -56,6 +56,7 @@ export function findOpen(
   radius = 9,
   type: TroopType = 'spearman',
   reachable: (point: Point) => boolean = () => true,
+  candidateAllowed: (point: Point) => boolean = () => true,
 ): Point | null {
   for (let r = 0; r <= radius; r++)
     for (let b = -r; b <= r; b++)
@@ -63,8 +64,9 @@ export function findOpen(
         if (Math.max(Math.abs(a), Math.abs(b)) !== r) continue;
         const tx = Math.floor(x) + a,
           ty = Math.floor(y) + b,
-          key = ty * SIZE + tx;
+          key = ty * s.map.width + tx;
         if (
+          candidateAllowed({ x: tx + 0.5, y: ty + 0.5 }) &&
           staticPositionClear(s, { x: tx + 0.5, y: ty + 0.5 }, unitRadius(type)) &&
           !s.units.some(
             (u) =>
