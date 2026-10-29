@@ -1,9 +1,21 @@
-import { DEFAULT_MAP, parseMap, validateMap, isClassicMap } from './map-definition.js';
+import { SMALL_MAP, BUILTIN_MAPS, parseMap, validateMap } from './map-definition.js';
 import { SCENARIOS, OPPONENTS } from './catalog.js';
 import { clamp, finite } from './utils.js';
 import { aliases, makeFaction } from './economy.js';
 import { addBuilding, addUnit } from './entities.js';
 import type { GameState, GameOptions, Team, BuildingType, TroopType } from './types.js';
+function isPresetMap(map: GameState['map']): boolean {
+  return BUILTIN_MAPS.some(
+    (preset) =>
+      map.width === preset.width &&
+      map.terrain.every((row, i) => row === preset.terrain[i]) &&
+      (['player', 'player2', 'enemy'] as const).every(
+        (team) =>
+          map.spawns[team].x === preset.spawns[team].x &&
+          map.spawns[team].y === preset.spawns[team].y,
+      ),
+  );
+}
 function starter(s: GameState, team: Team, x: number, y: number) {
   addBuilding(s, 'keep', x, y, team);
   for (const [type, dx, dy] of [
@@ -15,25 +27,11 @@ function starter(s: GameState, team: Team, x: number, y: number) {
     ['granary', -3, 4],
   ] as [BuildingType, number, number][])
     addBuilding(s, type, x + dx, y + dy, team);
-  const sites: [BuildingType, number, number][] =
-    team === 'enemy'
-      ? [
-          ['lumber', 50, 23],
-          ['quarry', 38, 20],
-          ['farm', 44, 24],
-        ]
-      : team === 'player2'
-        ? [
-            ['lumber', 51, 45],
-            ['quarry', 37, 49],
-            ['farm', 47, 50],
-          ]
-        : [
-            ['lumber', 8, 35],
-            ['quarry', 22, 39],
-            ['farm', 12, 32],
-          ];
-  for (const [type, a, b] of isClassicMap(s.map) ? sites : []) addBuilding(s, type, a, b, team);
+  if (isPresetMap(s.map)) {
+    addBuilding(s, 'lumber', x - 11, y - 9, team);
+    addBuilding(s, 'quarry', x + 8, y + 8, team);
+    addBuilding(s, 'farm', x - 8, y - 10, team);
+  }
   for (const [type, dx, dy] of [
     ['archer', 0, 3],
     ['archer', 2, 3],
@@ -56,7 +54,7 @@ export function createGame(options: GameOptions = {}): GameState {
       finite(options.scenario) && Number.isInteger(options.scenario)
         ? clamp(options.scenario, 0, 2)
         : 0;
-  const map = options.map ? parseMap(options.map) : DEFAULT_MAP;
+  const map = options.map ? parseMap(options.map) : SMALL_MAP;
   if (options.map) {
     const issues = validateMap(map);
     if (issues.errors.length) throw Error(issues.errors.join(' '));
@@ -93,28 +91,30 @@ export function createGame(options: GameOptions = {}): GameState {
   if (kind === 'skirmish' || (mode === 'multiplayer' && s.multiplayerMode === 'coop')) {
     s.factions.enemy = makeFaction('enemy', difficulty);
     starter(s, 'enemy', map.spawns.enemy.x, map.spawns.enemy.y);
-    if (isClassicMap(map))
+    if (isPresetMap(map))
       for (const [type, x, y] of [
-        ['tower', 42, 21],
-        ['wall', 45, 21],
-        ['wall', 46, 21],
+        ['tower', -3, 7],
+        ['wall', 0, 7],
+        ['wall', 1, 7],
       ] as [BuildingType, number, number][])
-        addBuilding(s, type, x, y, 'enemy');
+        addBuilding(s, type, x + map.spawns.enemy.x, y + map.spawns.enemy.y, 'enemy');
   } else if (kind === 'survival' || mode === 'sandbox')
     s.factions.enemy = makeFaction('enemy', difficulty);
-  if (mode === 'skirmish' && isClassicMap(map)) {
+  if (mode === 'skirmish') {
     const f = s.factions.enemy!;
     f.name = OPPONENTS[scenario].name;
     if (scenario === 1) {
       f.attackTimer = 60;
-      addBuilding(s, 'mercenary', 49, 18, 'enemy');
+      if (isPresetMap(map))
+        addBuilding(s, 'mercenary', map.spawns.enemy.x + 4, map.spawns.enemy.y + 4, 'enemy');
     }
     if (scenario === 2) {
-      for (const [x, y] of [
-        [49, 18],
-        [40, 15],
-      ] as [number, number][])
-        addBuilding(s, 'tower', x, y, 'enemy');
+      if (isPresetMap(map))
+        for (const [x, y] of [
+          [4, 4],
+          [-5, 1],
+        ] as [number, number][])
+          addBuilding(s, 'tower', x + map.spawns.enemy.x, y + map.spawns.enemy.y, 'enemy');
       f.attackTimer = 140;
     }
   }

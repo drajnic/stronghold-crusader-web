@@ -23,7 +23,7 @@ function stateOf(view: MultiplayerView): GameSnapshot {
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from '../src/server/host.js';
-import { createGame, deserialize, DEFAULT_MAP, mapFingerprint } from '../src/game/index.js';
+import { createGame, deserialize, SMALL_MAP, mapFingerprint } from '../src/game/index.js';
 import { MultiplayerSession } from '../src/client/network.js';
 
 const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
@@ -636,8 +636,8 @@ void test(
 void test('protocol boundary rejects malformed view metadata and action receipts', () => {
   const valid: MultiplayerView = {
     code: 'ABC123',
-    map: DEFAULT_MAP,
-    mapFingerprint: mapFingerprint(DEFAULT_MAP),
+    map: SMALL_MAP,
+    mapFingerprint: mapFingerprint(SMALL_MAP),
     team: 'player',
     isHost: true,
     status: 'lobby',

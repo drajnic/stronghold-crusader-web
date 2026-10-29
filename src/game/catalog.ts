@@ -1,8 +1,8 @@
 import { RESOURCE_KEYS } from './types.js';
 import type { ResourceKey, Scenario, Opponent } from './types.js';
 export { RESOURCE_KEYS } from './types.js';
-export const SIZE = 64,
-  MAX_UNITS = 160;
+export const MAX_UNITS = 160,
+  MAX_BUILDINGS = 1600;
 export const PRICES = Object.fromEntries(
   RESOURCE_KEYS.map((k) => [
     k,

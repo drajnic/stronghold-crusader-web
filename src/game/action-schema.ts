@@ -1,4 +1,5 @@
-import { TYPES, TROOPS, SIZE } from './catalog.js';
+import { TYPES, TROOPS } from './catalog.js';
+import { MAX_MAP_SIZE } from './map-definition.js';
 import { RESOURCE_KEYS } from './types.js';
 import type { GameAction, BuildingType, TroopType, ResourceKey, Team, Stance } from './types.js';
 import { finite, isRecord } from './utils.js';
@@ -35,8 +36,8 @@ export function parseAction(value: unknown): GameAction | null {
             finite(value.point.y) &&
             value.point.x >= 1 &&
             value.point.y >= 1 &&
-            value.point.x < SIZE - 1 &&
-            value.point.y < SIZE - 1))
+            value.point.x < MAX_MAP_SIZE - 1 &&
+            value.point.y < MAX_MAP_SIZE - 1))
         ? {
             type: 'rally',
             id: value.id as number,

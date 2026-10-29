@@ -21,13 +21,20 @@ export function json(res: ServerResponse, status: number, payload: unknown): voi
 export async function body(req: IncomingMessage, limit = 16384): Promise<Record<string, unknown>> {
   if (!/^application\/json(?:;|$)/i.test(req.headers['content-type'] || ''))
     throw new HttpError(415, 'JSON body required.');
+  if (Number(req.headers['content-length']) > limit) {
+    req.resume();
+    throw new HttpError(413, 'Request too large.');
+  }
   const chunks: Buffer[] = [];
   let size = 0;
-  for await (const raw of req) {
+  for await (const raw of req.iterator({ destroyOnReturn: false })) {
     const part: unknown = raw;
     if (!Buffer.isBuffer(part)) throw new HttpError(400, 'Invalid body.');
     size += part.length;
-    if (size > limit) throw new HttpError(413, 'Request too large.');
+    if (size > limit) {
+      req.resume();
+      throw new HttpError(413, 'Request too large.');
+    }
     chunks.push(part);
   }
   let value: unknown;

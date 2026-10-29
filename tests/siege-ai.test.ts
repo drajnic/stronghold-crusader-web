@@ -1,12 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGame } from '../src/game/factory.js';
+import { createGame as createDefaultGame } from '../src/game/factory.js';
 import { addBuilding, addUnit } from '../src/game/entities.js';
 import { clearShot } from '../src/game/line-of-fire.js';
 import { updateAI } from '../src/game/ai.js';
 import { shoot } from '../src/game/combat.js';
 import { TROOPS, TYPES } from '../src/game/catalog.js';
 import { fearFactor } from '../src/game/economy.js';
+
+import { parseMap, SMALL_MAP, type GameOptions } from '../src/game/index.js';
+// Tactical scenarios use the supported Small basin.
+const createGame = (options: GameOptions = {}) => createDefaultGame({ map: SMALL_MAP, ...options });
 
 function field() {
   const s = createGame({ mode: 'sandbox' });
@@ -139,7 +143,7 @@ void test('AI skips unavailable farm and mine terrain on a resource-free custom 
     map: {
       ...original.map,
       name: 'AI dry valley',
-      terrain: Array.from({ length: 64 }, () => 's'.repeat(64)),
+      terrain: Array.from({ length: 128 }, () => 's'.repeat(128)),
     },
   });
   const f = s.factions.enemy!;
@@ -173,6 +177,7 @@ void test('simulation cannot fire through a closed gate and resumes firing when 
   const { update } = await import('../src/game/simulation.js');
   const s = createGame({ mode: 'sandbox' });
   s.units = [];
+  s.map = parseMap({ ...SMALL_MAP, terrain: Array(128).fill('s'.repeat(128)) });
   const archer = addUnit(s, 'archer', 'player', 28, 28);
   const foe = addUnit(s, 'slave', 'enemy', 33, 28);
   foe.stance = 'hold';
@@ -218,8 +223,8 @@ void test('Warden requires six expedition troops and at least two siege escorts'
         s,
         i < 4 || i >= count - escorts ? 'spearman' : 'catapult',
         'enemy',
-        i < 4 ? 44 + i * 0.2 : 40 + i * 0.5,
-        i < 4 ? 17 : 35,
+        i < 4 ? 99 + i * 0.2 : 80 + i * 0.5,
+        i < 4 ? 24 : 45,
       );
     updateAI(s, 0.25);
     assert.equal(

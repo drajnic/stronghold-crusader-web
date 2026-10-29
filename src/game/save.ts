@@ -1,6 +1,6 @@
 import { FIRE_DURATION, FIRE_SPREAD_INTERVAL, isFlammable } from './fire.js';
-import { DEFAULT_MAP, parseMap } from './map-definition.js';
-import { TYPES, TROOPS, RESOURCE_KEYS, SIZE, MAX_UNITS, SCENARIOS } from './catalog.js';
+import { parseMap, type MapDefinition } from './map-definition.js';
+import { TYPES, TROOPS, RESOURCE_KEYS, MAX_UNITS, MAX_BUILDINGS, SCENARIOS } from './catalog.js';
 import { clamp, finite, isRecord, emptyResources } from './utils.js';
 import { aliases } from './economy.js';
 import { cells, terrain } from './map.js';
@@ -8,10 +8,13 @@ import { pathfind } from './pathfinding.js';
 import { resolveUnitOverlaps } from './spatial.js';
 import type { GameState, Factions, Building, Point } from './types.js';
 import { isTeam, isBuildingType, isTroopType, isStance } from './action-schema.js';
-export function serialize(s: GameState): string {
+export function serialize(
+  s: GameState,
+  { includeMap = true }: { includeMap?: boolean } = {},
+): string {
   return JSON.stringify({
     version: 3,
-    map: s.map,
+    map: includeMap ? s.map : undefined,
     time: s.time,
     mode: s.mode,
     difficulty: s.difficulty,
@@ -127,9 +130,20 @@ export function deserialize(
   } catch {
     invalid('This save could not be read.');
   }
+  return hydrateState(parsed, rebuildPaths);
+}
+/** Network state has already been decoded; retain its separately validated immutable map. */
+export function deserializeSnapshot(value: unknown, map: MapDefinition): GameState {
+  const data = record(value, 'Invalid network state.');
+  if (data.version !== 3) invalid('Invalid network state version.');
+  return hydrateState({ ...data, map: parseMap(map) }, false);
+}
+function hydrateState(parsed: unknown, rebuildPaths: boolean): GameState {
   const data = record(parsed, 'This save is not valid.');
-  if (data.version !== 2 && data.version !== 3)
-    invalid('This save uses an older game format. Start a new realm for the expanded game.');
+  if (data.version !== 3)
+    invalid(
+      'Unsupported save format. Only version 3 saves with a 128, 256, or 512 square map are supported. Start a new realm.',
+    );
   const mode = choice(data.mode, [
       'skirmish',
       'survival',
@@ -148,7 +162,7 @@ export function deserialize(
   if (
     !Array.isArray(data.buildings) ||
     !Array.isArray(data.units) ||
-    data.buildings.length > 1600 ||
+    data.buildings.length > MAX_BUILDINGS ||
     data.units.length > MAX_UNITS
   )
     invalid();
@@ -186,7 +200,7 @@ export function deserialize(
   const tutorial = isRecord(data.tutorial) ? data.tutorial : {};
   const s = aliases({
     version: 3,
-    map: data.version === 2 ? DEFAULT_MAP : parseMap(data.map),
+    map: parseMap(data.map),
     time,
     mode,
     difficulty,
@@ -211,6 +225,7 @@ export function deserialize(
     },
     invasionActive: !!data.invasionActive,
   });
+  const SIZE = s.map.width;
   const ids = new Set<number>(),
     occupied = new Set<number>();
   function entity(value: unknown) {

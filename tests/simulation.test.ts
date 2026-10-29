@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import * as m from '../src/game/index.js';
+import * as game from '../src/game/index.js';
+// Scenarios and frozen replays exercise the supported Small basin.
+const m = {
+  ...game,
+  createGame: (options: game.GameOptions = {}) =>
+    game.createGame({ map: game.SMALL_MAP, ...options }),
+};
 import { positionClear, unitRadius } from '../src/game/spatial.js';
 import type {
   GameState,
@@ -20,8 +26,8 @@ const advance = (s: GameState, seconds: number) => {
 };
 const sandbox = () => m.createGame({ mode: 'sandbox' });
 function buildAt(s: GameState, type: BuildingType, team: Team = 'player'): Building {
-  for (let y = 1; y < m.SIZE - 3; y++)
-    for (let x = 1; x < m.SIZE - 3; x++)
+  for (let y = 1; y < s.map.width - 3; y++)
+    for (let x = 1; x < s.map.width - 3; x++)
       if (m.canPlace(s, type, x, y, team).ok)
         return required(m.place(s, type, x, y, team).building);
   throw Error(`No site for ${type}`);
@@ -62,8 +68,8 @@ function building(s: GameState, type: BuildingType, team: Team, x: number, y: nu
   s.buildings.push(b);
   return b;
 }
-void test('64×64 factories, factions, alliances and campaign scenarios are distinct and roundtrip', () => {
-  assert.equal(m.SIZE, 64);
+void test('128×128 factories, factions, alliances and campaign scenarios are distinct and roundtrip', () => {
+  assert.equal(m.SMALL_MAP.width, 128);
   assert.ok(Object.keys(m.TYPES).length >= 30);
   assert.ok(Object.values(m.TROOPS).filter((d) => !d.untrainable).length >= 18);
   for (const options of [
@@ -277,8 +283,11 @@ void test('closed gates block all armies, open gates pass; tower garrison extend
   m.applyAction(s, { type: 'gate', id: gate.id, open: false });
   assert.equal(m.passable(s, gate.x, gate.y, 'player'), false);
   assert.equal(m.passable(s, gate.x, gate.y, 'enemy'), false);
-  const tower = building(s, 'tower', 'player', 16, 37),
-    archer = required(s.units.find((u) => u.type === 'archer'));
+  s.map = m.parseMap({ ...m.SMALL_MAP, terrain: Array(128).fill('s'.repeat(128)) });
+  const archer = required(s.units.find((u) => u.type === 'archer')),
+    tower = building(s, 'tower', 'player', 16, 37);
+  archer.x = 17;
+  archer.y = 39;
   assert.equal(
     m.applyAction(s, { type: 'garrison', ids: [archer.id], buildingId: tower.id }).ok,
     true,
@@ -317,7 +326,7 @@ void test('pathfinding breaches unavoidable hostile fortifications without freez
   const s = sandbox();
   s.buildings = s.buildings.filter((b) => b.type === 'keep');
   s.units = [];
-  for (let x = 1; x < m.SIZE - 1; x++) building(s, 'wall', 'enemy', x, 39);
+  for (let x = 1; x < s.map.width - 1; x++) building(s, 'wall', 'enemy', x, 39);
   const ram = unit(s, 'ram', 'player', 16.5, 41.5);
   ram.stance = 'defensive';
   m.command(s, [ram.id], 16, 36);
@@ -395,12 +404,10 @@ void test('save validator rejects old versions, nonfinite IDs, hostile garrisons
 void test('a legal economy, market, recruitment and garrison strategy wins campaign one', () => {
   const s = m.createGame({ mode: 'campaign', scenario: 0, difficulty: 'easy' }),
     sites: [number, number][] = [
-      [15, 39],
-      [18, 37],
-      [11, 38],
-      [21, 36],
-      [8, 38],
-      [15, 36],
+      [25, 87],
+      [28, 85],
+      [21, 86],
+      [31, 84],
     ];
   let built = 0;
   for (let n = 0; n < 600 / 0.05 && s.status === 'playing'; n++) {
@@ -426,6 +433,7 @@ void test('a legal economy, market, recruitment and garrison strategy wins campa
     }
     m.update(s, 0.05);
   }
+  assert.equal(built, sites.length, 'the defensive strategy builds every planned tower');
   assert.equal(s.status, 'victory');
   assert.equal(s.wave, 4);
   assert.ok(s.kills >= 60);
@@ -434,8 +442,8 @@ void test('a legal economy, market, recruitment and garrison strategy wins campa
 void test('a legal siege expedition destroys the skirmish enemy keep and wins', () => {
   const s = m.createGame({ mode: 'skirmish', difficulty: 'normal' });
   let workshop;
-  for (let y = 36; y < 52 && !workshop; y++)
-    for (let x = 10; x < 25 && !workshop; x++) {
+  for (let y = 84; y < 110 && !workshop; y++)
+    for (let x = 14; x < 40 && !workshop; x++) {
       const r = m.place(s, 'siege', x, y);
       if (r.ok) workshop = r.building;
     }
@@ -604,7 +612,7 @@ void test('trebuchet minimum range applies to explicit buildings and blocking wa
   assert.equal(wall.hp, m.TYPES.wall.hp);
   const breach = sandbox();
   breach.units = [];
-  for (let x = 1; x < m.SIZE - 1; x++) building(breach, 'wall', 'enemy', x, 39);
+  for (let x = 1; x < breach.map.width - 1; x++) building(breach, 'wall', 'enemy', x, 39);
   const blocked = unit(breach, 'trebuchet', 'player', 20.5, 40.5);
   assert.ok(m.command(breach, [blocked.id], 20, 35).ok);
   advance(breach, 10);
@@ -677,21 +685,28 @@ void test('deterministic command replays match canonical snapshots and repeat id
   const { createHash } = await import('node:crypto');
   interface ReplayFixture {
     options: GameOptions;
-    commands: { tick: number; action: unknown }[];
+    mapFingerprint: string;
+    commands: { tick: number; action: unknown; ok: boolean }[];
     expected: { tick: number; hash: string }[];
   }
   const fixtures = JSON.parse(
     await readFile(new URL('./fixtures/simulation-replay.json', import.meta.url), 'utf8'),
   ) as ReplayFixture[];
   for (const fixture of fixtures) {
+    assert.equal(fixture.mapFingerprint, m.mapFingerprint(m.SMALL_MAP));
     const runs: string[][] = [];
     for (let run = 0; run < 2; run++) {
       const hashes: string[] = [];
-      let s = m.createGame(fixture.options);
+      let s = m.createGame({ ...fixture.options, map: m.SMALL_MAP });
       for (let tick = 0; tick <= 4200; tick++) {
         if (tick) {
           for (const entry of fixture.commands)
-            if (entry.tick === tick) m.applyAction(s, entry.action);
+            if (entry.tick === tick)
+              assert.equal(
+                m.applyAction(s, entry.action).ok,
+                entry.ok,
+                `Command ${tick}: ${JSON.stringify(fixture.options)}`,
+              );
           m.update(s, 0.05);
           if (tick === 160) s = m.deserialize(m.serialize(s));
         }
@@ -705,9 +720,8 @@ void test('deterministic command replays match canonical snapshots and repeat id
               );
           const snapshot = JSON.parse(m.serialize(s)) as Record<string, unknown>;
           delete snapshot.events;
-          // The replay fixture measures simulation behavior, independent of save envelope migration.
+          // Immutable terrain is pinned by the fixture fingerprint.
           delete snapshot.map;
-          snapshot.version = 2;
           const hash = createHash('sha256').update(JSON.stringify(snapshot)).digest('hex');
           hashes.push(hash);
           assert.equal(hash, expected.hash, `${JSON.stringify(fixture.options)} at tick ${tick}`);

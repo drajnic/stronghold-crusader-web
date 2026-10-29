@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   createGame,
+  SMALL_MAP,
   applyAction,
   canPlace,
   command,
@@ -9,6 +10,7 @@ import {
   serialize,
   update,
   passable,
+  parseMap,
 } from '../src/game/index.js';
 import { addBuilding, addUnit, findOpen } from '../src/game/entities.js';
 import { positionClear, unitRadius } from '../src/game/spatial.js';
@@ -134,6 +136,10 @@ void test('public commands avoid idle bodies and solid resource terrain', () => 
 
 void test('open gates and traps clear resource decor beneath their footprints', () => {
   const s = emptyBattle();
+  const rows = Array.from({ length: 128 }, () => 's'.repeat(128));
+  rows[37] = rows[37].slice(0, 22) + 't' + rows[37].slice(23);
+  rows[21] = rows[21].slice(0, 53) + 'i' + rows[21].slice(54);
+  s.map = parseMap({ ...SMALL_MAP, terrain: rows });
   assert.equal(passable(s, 22, 37), false);
   const gate = addBuilding(s, 'gate', 22, 37, 'player');
   assert.equal(passable(s, 22, 37), true);

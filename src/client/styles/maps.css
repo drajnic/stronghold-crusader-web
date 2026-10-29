@@ -153,3 +153,20 @@
     600 11px Georgia,
     serif;
 }
+
+.map-viewport {
+  overflow: auto;
+  max-height: 65vh;
+  width: 100%;
+}
+
+.map-viewport canvas {
+  max-width: none;
+  height: auto;
+  margin-inline: auto;
+}
+
+#map-current-size {
+  display: block;
+  margin-bottom: 8px;
+}

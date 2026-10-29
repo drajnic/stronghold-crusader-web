@@ -1,4 +1,4 @@
-import { SIZE, buildingAt, terrain } from '../../game/index.js';
+import { SMALL_MAP, buildingAt, terrain } from '../../game/index.js';
 import type { GameState, MapDefinition, Point } from '../../game/index.js';
 import { DrawingSurface } from './drawing.js';
 import { environmentNoise as noise, viewportBounds } from './environment-geometry.js';
@@ -264,16 +264,29 @@ function spriteFor(kind: DecorKind, variant: number): Sprite {
 /** Static detail is bucketed once. Frames visit only buckets intersecting the viewport. */
 export class EnvironmentScene {
   private readonly buckets = new Map<number, EnvironmentDetail[]>();
-  constructor(map?: MapDefinition) {
+  private readonly size: number;
+  private readonly stride: number;
+  private readonly generated = new Set<number>();
+  private readonly map: MapDefinition;
+  constructor(map: MapDefinition = SMALL_MAP) {
+    this.size = map.width;
+    this.stride = Math.ceil(map.width / 8);
+    this.map = map;
+  }
+  private generate(bx: number, by: number): void {
+    const key = by * this.stride + bx;
+    if (this.generated.has(key)) return;
+    this.generated.add(key);
+    const map = this.map;
     const add = (kind: DecorKind, x: number, y: number, variant: number) => {
       const item = { kind, x: x + 0.5, y: y + 0.5, variant },
-        key = Math.floor(y / 8) * 8 + Math.floor(x / 8);
+        key = Math.floor(y / 8) * this.stride + Math.floor(x / 8);
       const bucket = this.buckets.get(key);
       if (bucket) bucket.push(item);
       else this.buckets.set(key, [item]);
     };
-    for (let y = 0; y < SIZE; y++)
-      for (let x = 0; x < SIZE; x++) {
+    for (let y = by * 8; y < Math.min(map.height, (by + 1) * 8); y++)
+      for (let x = bx * 8; x < Math.min(map.width, (bx + 1) * 8); x++) {
         const t = terrain(x, y, map),
           h = noise(x, y),
           variant = Math.floor(noise(y + 11, x + 9) * 9);
@@ -303,11 +316,12 @@ export class EnvironmentScene {
     r: Pick<DrawingSurface, 'inverse' | 'project' | 'width' | 'height'>,
     s: GameState,
   ): EnvironmentDetail[] {
-    const bounds = viewportBounds((x, y) => r.inverse(x, y), r.width, r.height, SIZE),
+    const bounds = viewportBounds((x, y) => r.inverse(x, y), r.width, r.height, this.size),
       visible: EnvironmentDetail[] = [];
     for (let by = Math.floor(bounds.minY / 8); by <= Math.floor(bounds.maxY / 8); by++)
-      for (let bx = Math.floor(bounds.minX / 8); bx <= Math.floor(bounds.maxX / 8); bx++)
-        for (const item of this.buckets.get(by * 8 + bx) || []) {
+      for (let bx = Math.floor(bounds.minX / 8); bx <= Math.floor(bounds.maxX / 8); bx++) {
+        this.generate(bx, by);
+        for (const item of this.buckets.get(by * this.stride + bx) || []) {
           if (
             item.x < bounds.minX ||
             item.x > bounds.maxX + 1 ||
@@ -320,6 +334,7 @@ export class EnvironmentScene {
           if (p.x < -90 || p.x > r.width + 90 || p.y < -30 || p.y > r.height + 120) continue;
           visible.push(item);
         }
+      }
     return visible;
   }
   draw(r: DrawingSurface, item: EnvironmentDetail, time: number): void {

@@ -29,6 +29,14 @@ export function applyAction(s: GameState, input: unknown, team: string = 'player
       const b = s.buildings.find((b) => b.id === a.id && b.team === team && b.hp > 0);
       if (!b || !Object.values(TROOPS).some((d) => !d.untrainable && d.facility === b.type))
         return { ok: false, reason: 'Choose one of your recruitment buildings.' };
+      if (
+        a.point &&
+        (a.point.x < 1 ||
+          a.point.y < 1 ||
+          a.point.x >= s.map.width - 1 ||
+          a.point.y >= s.map.height - 1)
+      )
+        return { ok: false, reason: 'Choose a rally point inside the battlefield.' };
       if (a.point === null) delete b.rallyPoint;
       else b.rallyPoint = { ...a.point };
       return { ok: true };

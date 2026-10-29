@@ -5,7 +5,7 @@ import { addBuilding } from '../src/game/entities.js';
 import { parseAction } from '../src/game/action-schema.js';
 import { staticPositionClear, unitRadius } from '../src/game/spatial.js';
 function setup() {
-  const s = m.createGame({ mode: 'sandbox' });
+  const s = m.createGame({ map: m.SMALL_MAP, mode: 'sandbox' });
   s.buildings = s.buildings.filter((b) => b.type === 'keep');
   s.units = [];
   s.factions.player.civilians = 100;
@@ -30,7 +30,7 @@ void test('rally validates ownership, facility, coordinates and clear, and survi
     { x: NaN, y: 2 },
     { x: Infinity, y: 2 },
     { x: 0, y: 2 },
-    { x: 2, y: m.SIZE - 1 },
+    { x: 2, y: m.MAX_MAP_SIZE - 1 },
   ])
     assert.equal(parseAction({ type: 'rally', id: first.id, point: bad }), null);
   assert.equal(parseAction({ type: 'rally', id: 1.5, point: null }), null);
@@ -91,7 +91,7 @@ void test('blocked rally uses deterministic reachable fallback without occupying
 });
 void test('unreachable rally leaves recruits safely spawned without charging twice or teleporting', () => {
   const { s, first } = setup();
-  for (let y = 1; y < m.SIZE - 1; y++) addBuilding(s, 'wall', 40, y, 'player');
+  for (let y = 1; y < s.map.width - 1; y++) addBuilding(s, 'wall', 40, y, 'player');
   first.rallyPoint = { x: 60, y: 15 };
   const result = m.applyAction(s, { type: 'recruit', unit: 'spearman', facilityId: first.id });
   assert.equal(result.ok, true);

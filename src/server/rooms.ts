@@ -42,9 +42,13 @@ export const cleanName = (value: unknown): string =>
     .slice(0, 24) || 'Crusader';
 export function snapshot(state: GameState | null): GameSnapshot | null {
   if (!state) return null;
-  const saved: unknown = JSON.parse(serialize(state));
+  const saved: unknown = JSON.parse(serialize(state, { includeMap: false }));
   if (!isRecord(saved)) throw Error('The simulation returned an invalid snapshot.');
-  return { ...saved, effects: structuredClone(state.effects) } as unknown as GameSnapshot;
+  return {
+    ...saved,
+    map: state.map,
+    effects: structuredClone(state.effects),
+  } as unknown as GameSnapshot;
 }
 function equalToken(a: unknown, b: string): boolean {
   if (typeof a !== 'string') return false;

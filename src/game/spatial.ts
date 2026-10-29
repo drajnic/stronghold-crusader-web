@@ -1,4 +1,4 @@
-import { SIZE, TROOPS } from './catalog.js';
+import { TROOPS } from './catalog.js';
 import { passable } from './map.js';
 import type { GameState, Point, TroopType, Unit } from './types.js';
 
@@ -9,7 +9,12 @@ export function unitRadius(unit: TroopType | Unit): number {
 }
 export function staticPositionClear(s: GameState, p: Point, radius: number): boolean {
   if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) return false;
-  if (p.x - radius < 1 || p.y - radius < 1 || p.x + radius > SIZE - 1 || p.y + radius > SIZE - 1)
+  if (
+    p.x - radius < 1 ||
+    p.y - radius < 1 ||
+    p.x + radius > s.map.width - 1 ||
+    p.y + radius > s.map.width - 1
+  )
     return false;
   for (let y = Math.floor(p.y - radius); y <= Math.floor(p.y + radius); y++)
     for (let x = Math.floor(p.x - radius); x <= Math.floor(p.x + radius); x++) {

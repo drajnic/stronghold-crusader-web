@@ -32,18 +32,29 @@ export function paintStroke(
   brush: string,
   size: number,
 ): MapDefinition {
-  const anchor = { x: Math.max(1, Math.min(62, to.x)), y: Math.max(1, Math.min(62, to.y)) };
+  const anchor = {
+    x: Math.max(1, Math.min(map.width - 2, to.x)),
+    y: Math.max(1, Math.min(map.height - 2, to.y)),
+  };
   if (brush === 'raid') return { ...map, raid: anchor };
   if (['player', 'player2', 'enemy'].includes(brush))
     return { ...map, spawns: { ...map.spawns, [brush]: anchor } };
   if (!'swgtrip'.includes(brush) || brush.length !== 1) return map;
-  const rows = map.terrain.map((row) => [...row]),
+  const rows = [...map.terrain],
+    changed = new Map<number, string[]>(),
     radius = (size - 1) / 2;
   for (const { x, y } of strokeCells(from, to))
-    for (let yy = Math.max(0, y - radius); yy <= Math.min(63, y + radius); yy++)
-      for (let xx = Math.max(0, x - radius); xx <= Math.min(63, x + radius); xx++)
-        rows[yy][xx] = brush;
-  return { ...map, terrain: rows.map((row) => row.join('')) };
+    for (let yy = Math.max(0, y - radius); yy <= Math.min(map.height - 1, y + radius); yy++)
+      for (let xx = Math.max(0, x - radius); xx <= Math.min(map.width - 1, x + radius); xx++) {
+        let row = changed.get(yy);
+        if (!row) {
+          row = [...rows[yy]];
+          changed.set(yy, row);
+        }
+        row[xx] = brush;
+      }
+  for (const [y, row] of changed) rows[y] = row.join('');
+  return { ...map, terrain: rows };
 }
 export class EditorHistory {
   private past: MapDefinition[] = [];
@@ -100,4 +111,31 @@ export function updateMetadata(
     map.description === fields.description
     ? map
     : { ...map, ...fields };
+}
+
+/** Failed recovery must stay untouched until the user explicitly replaces it. */
+export class EditorDraftStorage {
+  protectedDraft = false;
+  constructor(
+    private readonly read: () => string | null,
+    private readonly write: (raw: string) => void,
+  ) {}
+  recover(): MapDefinition | undefined {
+    try {
+      const raw = this.read();
+      return raw ? decodeDraft(raw) : undefined;
+    } catch (error) {
+      this.protectedDraft = true;
+      throw error;
+    }
+  }
+  persist(raw: string): boolean {
+    if (this.protectedDraft) return false;
+    this.write(raw);
+    return true;
+  }
+  replace(raw: string): void {
+    this.write(raw);
+    this.protectedDraft = false;
+  }
 }
